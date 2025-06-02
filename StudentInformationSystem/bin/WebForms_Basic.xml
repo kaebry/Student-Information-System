@@ -334,36 +334,225 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._ErrorMessage">
+<member name="F:StudentInformationSystem.Register._MessagePanel">
 <summary>
-ErrorMessage control.
+MessagePanel control.
 </summary>
 <remarks>
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._Email">
+<member name="F:StudentInformationSystem.Register._MessageLiteral">
 <summary>
-Email control.
+MessageLiteral control.
 </summary>
 <remarks>
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._Password">
+<member name="F:StudentInformationSystem.Register._ValidationSummary1">
 <summary>
-Password control.
+ValidationSummary1 control.
 </summary>
 <remarks>
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._ConfirmPassword">
+<member name="F:StudentInformationSystem.Register._txtFirstName">
 <summary>
-ConfirmPassword control.
+txtFirstName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvFirstName">
+<summary>
+rfvFirstName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._txtLastName">
+<summary>
+txtLastName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvLastName">
+<summary>
+rfvLastName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._ddlUserRole">
+<summary>
+ddlUserRole control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvUserRole">
+<summary>
+rfvUserRole control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._pnlStudentFields">
+<summary>
+pnlStudentFields control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._txtDateOfBirth">
+<summary>
+txtDateOfBirth control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._ddlYearLevel">
+<summary>
+ddlYearLevel control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._ddlProgram">
+<summary>
+ddlProgram control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._pnlTeacherFields">
+<summary>
+pnlTeacherFields control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._ddlDepartment">
+<summary>
+ddlDepartment control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._txtEmail">
+<summary>
+txtEmail control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvEmail">
+<summary>
+rfvEmail control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._revEmail">
+<summary>
+revEmail control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._txtPassword">
+<summary>
+txtPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvPassword">
+<summary>
+rfvPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._revPassword">
+<summary>
+revPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._txtConfirmPassword">
+<summary>
+txtConfirmPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._rfvConfirmPassword">
+<summary>
+rfvConfirmPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._cvPassword">
+<summary>
+cvPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Register._btnRegister">
+<summary>
+btnRegister control.
 </summary>
 <remarks>
 Auto-generated field.

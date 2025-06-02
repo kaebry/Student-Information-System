@@ -14,94 +14,220 @@ Option Explicit On
 Partial Public Class Register
 
     '''<summary>
-    '''ErrorMessage control.
+    '''MessagePanel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ErrorMessage As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents MessagePanel As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''FirstName control.
+    '''MessageLiteral control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents FirstName As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents MessageLiteral As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''LastName control.
+    '''ValidationSummary1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents LastName As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ValidationSummary1 As Global.System.Web.UI.WebControls.ValidationSummary
 
     '''<summary>
-    '''DateOfBirth control.
+    '''txtFirstName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents DateOfBirth As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtFirstName As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Program control.
+    '''rfvFirstName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Program As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents rfvFirstName As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''YearLevel control.
+    '''txtLastName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents YearLevel As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents txtLastName As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Email control.
+    '''rfvLastName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Email As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents rfvLastName As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''Password control.
+    '''ddlUserRole control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Password As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlUserRole As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''ConfirmPassword control.
+    '''rfvUserRole control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ConfirmPassword As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents rfvUserRole As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''UserRole control.
+    '''pnlStudentFields control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents UserRole As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents pnlStudentFields As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''txtDateOfBirth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtDateOfBirth As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''ddlYearLevel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlYearLevel As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''ddlProgram control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlProgram As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''pnlTeacherFields control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlTeacherFields As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''ddlDepartment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlDepartment As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''txtEmail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtEmail As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''rfvEmail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rfvEmail As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''revEmail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents revEmail As Global.System.Web.UI.WebControls.RegularExpressionValidator
+
+    '''<summary>
+    '''txtPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtPassword As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''rfvPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rfvPassword As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''revPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents revPassword As Global.System.Web.UI.WebControls.RegularExpressionValidator
+
+    '''<summary>
+    '''txtConfirmPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtConfirmPassword As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''rfvConfirmPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rfvConfirmPassword As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''cvPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cvPassword As Global.System.Web.UI.WebControls.CompareValidator
 
     '''<summary>
     '''btnRegister control.
