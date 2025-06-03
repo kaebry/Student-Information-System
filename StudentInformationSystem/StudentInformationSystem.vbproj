@@ -207,6 +207,7 @@
     <Content Include="About.aspx" />
     <Content Include="Account\AddPhoneNumber.aspx" />
     <Content Include="Account\Confirm.aspx" />
+    <Content Include="Account\CreateAdmin.aspx" />
     <Content Include="Account\Forgot.aspx" />
     <Content Include="Account\Lockout.aspx" />
     <Content Include="Account\Login.aspx" />
@@ -315,6 +316,13 @@
     <Compile Include="Account\Confirm.aspx.vb">
       <DependentUpon>Confirm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\CreateAdmin.aspx.designer.vb">
+      <DependentUpon>CreateAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\CreateAdmin.aspx.vb">
+      <DependentUpon>CreateAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Account\Forgot.aspx.designer.vb">
       <DependentUpon>Forgot.aspx</DependentUpon>
