@@ -8,7 +8,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
+    <title><%: Page.Title %> - Student Information System</title>
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
@@ -47,35 +47,78 @@
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">Manage Students</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Manage Courses</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Manage Enrollments</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
+                        
+                        <!-- Show navigation items only when logged in -->
+                        <% If IsUserLoggedIn Then %>
+                            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">Manage Students</a></li>
+                            <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Manage Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Manage Enrollments</a></li>
+                        <% End If %>
                     </ul>
-                    <asp:LoginView runat="server" ViewStateMode="Disabled">
-                        <AnonymousTemplate>
-                            <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="~/Account/Register">Register</a></li>
-                                <li><a runat="server" class="nav-link" href="~/Account/Login">Log in</a></li>
-                            </ul>
-                        </AnonymousTemplate>
-                        <LoggedInTemplate>
-                            <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
-                                <li>
-                                    <asp:LoginStatus runat="server" CssClass="nav-link" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
-                                </li>
-                            </ul>
-                        </LoggedInTemplate>
-                    </asp:LoginView>
+                    
+                    <!-- Right side navigation - Login state dependent -->
+                    <ul class="navbar-nav navbar-right">
+                        <% If IsUserLoggedIn Then %>
+                            <!-- Logged in user menu -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user"></i> <%: UserFullName %>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="~/Account/Manage.aspx">
+                                        <i class="fas fa-cog"></i> Account Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><span class="dropdown-item-text text-muted">
+                                        <small><i class="fas fa-id-badge"></i> <%: UserRole.ToUpper() %></small></span></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <asp:LinkButton ID="lnkLogout" runat="server" CssClass="nav-link" OnClick="Logout_Click" OnClientClick="return confirm('Are you sure you want to logout?');">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </asp:LinkButton>
+                            </li>
+                        <% Else %>
+                            <!-- Anonymous user menu -->
+                            <li class="nav-item">
+                                <a runat="server" class="nav-link" href="~/Account/Register">
+                                    <i class="fas fa-user-plus"></i> Register
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a runat="server" class="nav-link" href="~/Account/Login">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                            </li>
+                        <% End If %>
+                    </ul>
                 </div>
             </div>
         </nav>
+        
+        <!-- Show welcome message for logged in users -->
+        <% If IsUserLoggedIn Then %>
+            <div class="bg-light border-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Welcome back, <strong><%: UserFullName %></strong>! 
+                                You are logged in as <span class="badge badge-secondary"><%: UserRole.ToUpper() %></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% End If %>
+        
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Student Information System</p>
             </footer>
         </div>
     </form>

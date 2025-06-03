@@ -14,65 +14,101 @@ Option Explicit On
 Partial Public Class Login
 
     '''<summary>
-    '''ErrorMessage control.
+    '''MessagePanel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ErrorMessage As Global.System.Web.UI.WebControls.PlaceHolder
+    Protected WithEvents MessagePanel As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''FailureText control.
+    '''MessageLiteral control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents FailureText As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents MessageLiteral As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''Email control.
+    '''ValidationSummary1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Email As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ValidationSummary1 As Global.System.Web.UI.WebControls.ValidationSummary
 
     '''<summary>
-    '''Password control.
+    '''txtEmail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Password As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtEmail As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''RememberMe control.
+    '''rfvEmail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RememberMe As Global.System.Web.UI.WebControls.CheckBox
+    Protected WithEvents rfvEmail As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''RegisterHyperLink control.
+    '''revEmail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RegisterHyperLink As Global.System.Web.UI.WebControls.HyperLink
+    Protected WithEvents revEmail As Global.System.Web.UI.WebControls.RegularExpressionValidator
 
     '''<summary>
-    '''OpenAuthLogin control.
+    '''txtPassword control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents OpenAuthLogin As Global.StudentInformationSystem.OpenAuthProviders
+    Protected WithEvents txtPassword As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''rfvPassword control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rfvPassword As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''chkRememberMe control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkRememberMe As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''btnLogin control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnLogin As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''pnlRegistrationSuccess control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlRegistrationSuccess As Global.System.Web.UI.WebControls.Panel
 End Class

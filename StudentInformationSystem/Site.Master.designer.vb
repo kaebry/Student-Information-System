@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class SiteMaster
 
     '''<summary>
+    '''lnkLogout control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkLogout As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
     '''MainContent control.
     '''</summary>
     '''<remarks>
