@@ -46,16 +46,44 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        
-                        <!-- Show navigation items only when logged in -->
-                        <% If IsUserLoggedIn Then %>
-                            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">Manage Students</a></li>
-                            <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Manage Courses</a></li>
-                            <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Manage Enrollments</a></li>
-                        <% End If %>
-                    </ul>
+                                        <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
+    
+    <!-- Show navigation items based on user role -->
+    <% If IsUserLoggedIn Then %>
+        <% If UserRole = "admin" Then %>
+            <!-- Admin Navigation - Simple Links -->
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageUsers.aspx">
+                <i class="fas fa-users"></i> Manage Users</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">
+                <i class="fas fa-user-graduate"></i> Manage Students</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageCourses.aspx">
+                <i class="fas fa-book"></i> Manage Courses</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageEnrollments.aspx">
+                <i class="fas fa-clipboard-list"></i> Manage Enrollments</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/Reports.aspx">
+                <i class="fas fa-chart-bar"></i> Reports</a></li>
+                
+        <% ElseIf UserRole = "teacher" Then %>
+            <!-- Teacher Navigation -->
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Teacher/MyCourses.aspx">
+                <i class="fas fa-book"></i> My Courses</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Teacher/ManageGrades.aspx">
+                <i class="fas fa-clipboard-check"></i> Manage Grades</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">
+                <i class="fas fa-users"></i> View Students</a></li>
+                
+        <% ElseIf UserRole = "student" Then %>
+            <!-- Student Navigation -->
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/MyEnrollments.aspx">
+                <i class="fas fa-book-open"></i> My Courses</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/AvailableCourses.aspx">
+                <i class="fas fa-search"></i> Browse Courses</a></li>
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/MyGrades.aspx">
+                <i class="fas fa-trophy"></i> My Grades</a></li>
+        <% End If %>
+    <% End If %>
+</ul>
                     
                     <!-- Right side navigation - Login state dependent -->
                     <ul class="navbar-nav navbar-right">
@@ -125,5 +153,56 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
+    
+    <!-- Fix for dropdown navigation -->
+    <script>
+        // Ensure dropdown toggles work properly
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent dropdown toggle links from navigating
+            var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            });
+            
+            // Initialize Bootstrap dropdowns
+            var dropdowns = document.querySelectorAll('.dropdown-toggle');
+            dropdowns.forEach(function(dropdown) {
+                new bootstrap.Dropdown(dropdown);
+            });
+        });
+    </script>
+    
+    <style>
+        /* Ensure dropdown menus appear correctly */
+        .dropdown-menu {
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 0.375rem;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Fix for dropdown toggle cursor */
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+        
+        /* Ensure dropdown arrows show */
+        .dropdown-toggle::after {
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
+    </style>
 </body>
 </html>
