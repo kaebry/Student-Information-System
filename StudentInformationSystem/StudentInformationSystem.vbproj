@@ -222,6 +222,7 @@
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="Admin\ManageEnrollments.aspx" />
+    <Content Include="Admin\Reports.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -424,6 +425,13 @@
     </Compile>
     <Compile Include="Admin\ManageEnrollments.aspx.vb">
       <DependentUpon>ManageEnrollments.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Reports.aspx.designer.vb">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Reports.aspx.vb">
+      <DependentUpon>Reports.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="App_Start\BundleConfig.vb" />

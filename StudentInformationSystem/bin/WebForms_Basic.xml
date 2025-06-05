@@ -1009,6 +1009,222 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.Reports._MessagePanel">
+<summary>
+MessagePanel control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._MessageLiteral">
+<summary>
+MessageLiteral control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblTotalStudents">
+<summary>
+lblTotalStudents control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblTotalCourses">
+<summary>
+lblTotalCourses control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblTotalEnrollments">
+<summary>
+lblTotalEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblAvgEnrollments">
+<summary>
+lblAvgEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblMostPopularCourse">
+<summary>
+lblMostPopularCourse control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._lblEnrollmentRate">
+<summary>
+lblEnrollmentRate control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._btnRefresh">
+<summary>
+btnRefresh control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._btnExportData">
+<summary>
+btnExportData control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._chartContainer">
+<summary>
+chartContainer control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._noDataMessage">
+<summary>
+noDataMessage control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._trendsChartContainer">
+<summary>
+trendsChartContainer control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._pnlNoTrendsData">
+<summary>
+pnlNoTrendsData control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._formatChartContainer">
+<summary>
+formatChartContainer control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._pnlNoFormatData">
+<summary>
+pnlNoFormatData control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._rpRecentActivity">
+<summary>
+rpRecentActivity control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._pnlNoActivity">
+<summary>
+pnlNoActivity control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnCourseNames">
+<summary>
+hdnCourseNames control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnStudentCounts">
+<summary>
+hdnStudentCounts control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnTrendMonths">
+<summary>
+hdnTrendMonths control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnTrendEnrollments">
+<summary>
+hdnTrendEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnFormatLabels">
+<summary>
+hdnFormatLabels control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.Reports._hdnFormatCounts">
+<summary>
+hdnFormatCounts control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:StudentInformationSystem.ManageCourses._MessagePanel">
 <summary>
 MessagePanel control.
