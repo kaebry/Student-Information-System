@@ -221,6 +221,7 @@
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
+    <Content Include="Admin\ManageEnrollments.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -418,6 +419,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Content Include="App_Code\DatabaseHelper.vb" />
+    <Compile Include="Admin\ManageEnrollments.aspx.designer.vb">
+      <DependentUpon>ManageEnrollments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ManageEnrollments.aspx.vb">
+      <DependentUpon>ManageEnrollments.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\IdentityConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
