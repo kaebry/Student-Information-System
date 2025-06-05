@@ -496,60 +496,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._ddlUserRole">
-<summary>
-ddlUserRole control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._rfvUserRole">
-<summary>
-rfvUserRole control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._pnlStudentFields">
-<summary>
-pnlStudentFields control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._txtDateOfBirth">
-<summary>
-txtDateOfBirth control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._ddlYearLevel">
-<summary>
-ddlYearLevel control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._ddlProgram">
-<summary>
-ddlProgram control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:StudentInformationSystem.Register._txtEmail">
 <summary>
 txtEmail control.
@@ -1441,6 +1387,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.ManageStudents._lblMessage">
+<summary>
+lblMessage control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:StudentInformationSystem.ManageStudents._txtFirstName">
 <summary>
 txtFirstName control.
@@ -1450,9 +1405,27 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.ManageStudents._rfvFirstName">
+<summary>
+rfvFirstName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:StudentInformationSystem.ManageStudents._txtLastName">
 <summary>
 txtLastName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.ManageStudents._rfvLastName">
+<summary>
+rfvLastName control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -1471,6 +1444,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:StudentInformationSystem.ManageStudents._txtEnrollmentDate">
 <summary>
 txtEnrollmentDate control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.ManageStudents._rfvEnrollmentDate">
+<summary>
+rfvEnrollmentDate control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -1507,15 +1489,6 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:StudentInformationSystem.ManageStudents._btnClear">
 <summary>
 btnClear control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.ManageStudents._lblMessage">
-<summary>
-lblMessage control.
 </summary>
 <remarks>
 Auto-generated field.

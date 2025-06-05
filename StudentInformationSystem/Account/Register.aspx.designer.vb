@@ -77,60 +77,6 @@ Partial Public Class Register
     Protected WithEvents rfvLastName As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''ddlUserRole control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddlUserRole As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
-    '''rfvUserRole control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rfvUserRole As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
-    '''pnlStudentFields control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents pnlStudentFields As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''txtDateOfBirth control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtDateOfBirth As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''ddlYearLevel control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddlYearLevel As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
-    '''ddlProgram control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddlProgram As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
     '''txtEmail control.
     '''</summary>
     '''<remarks>

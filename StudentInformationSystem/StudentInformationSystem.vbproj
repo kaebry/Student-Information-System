@@ -245,7 +245,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Admin\ManageCourses.aspx" />
-    <Content Include="ManageStudents.aspx" />
+    <Content Include="Admin\ManageStudents.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -469,10 +469,10 @@
       <DependentUpon>ManageCourses.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="ManageStudents.aspx.designer.vb">
+    <Compile Include="Admin\ManageStudents.aspx.designer.vb">
       <DependentUpon>ManageStudents.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ManageStudents.aspx.vb">
+    <Compile Include="Admin\ManageStudents.aspx.vb">
       <DependentUpon>ManageStudents.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>

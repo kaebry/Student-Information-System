@@ -12,17 +12,10 @@ Partial Class Register
             If User.Identity.IsAuthenticated Then
                 Response.Redirect("~/Default.aspx")
             End If
-        End If
-    End Sub
 
-    Protected Sub ddlUserRole_SelectedIndexChanged(sender As Object, e As EventArgs)
-        ' Show/hide fields based on selected role
-        Select Case ddlUserRole.SelectedValue.ToLower()
-            Case "student"
-                pnlStudentFields.Visible = True
-            Case Else
-                pnlStudentFields.Visible = False
-        End Select
+            ' Focus on first name field
+            txtFirstName.Focus()
+        End If
     End Sub
 
     Protected Sub btnRegister_Click(sender As Object, e As EventArgs)
@@ -47,7 +40,7 @@ Partial Class Register
             Dim lastName As String = txtLastName.Text.Trim()
             Dim email As String = txtEmail.Text.Trim().ToLower()
             Dim password As String = txtPassword.Text.Trim()
-            Dim role As String = ddlUserRole.SelectedValue
+            Dim role As String = "student" ' Fixed role for simplified registration
 
             ' Basic validation
             If String.IsNullOrEmpty(firstName) Then
@@ -80,11 +73,6 @@ Partial Class Register
                 Return
             End If
 
-            If String.IsNullOrEmpty(role) Then
-                ShowMessage("Please select your role.", "danger")
-                Return
-            End If
-
             ' Check if email already exists
             If EmailExists(email) Then
                 ShowMessage("An account with this email already exists. Please use a different email or try logging in.", "danger")
@@ -99,10 +87,10 @@ Partial Class Register
 
             If success Then
                 ' Registration successful
-                ShowMessage("Registration successful! You can now log in with your credentials.", "success")
+                ShowMessage("🎉 Registration successful! You can now log in with your credentials.", "success")
                 ClearForm()
 
-                ' Optional: Auto-redirect to login page after a delay
+                ' Auto-redirect to login page after a delay
                 ClientScript.RegisterStartupScript(Me.GetType(), "redirect",
                     "setTimeout(function(){ window.location.href='Login.aspx?registered=true'; }, 3000);", True)
             Else
@@ -171,8 +159,6 @@ Partial Class Register
 
         Try
             conn = New NpgsqlConnection(connStr)
-
-            ' Set connection timeout
             conn.Open()
 
             ' Test connection first
@@ -184,15 +170,11 @@ Partial Class Register
             ' Start transaction
             transaction = conn.BeginTransaction()
 
-            Dim relatedId As Integer = 0
+            ' Create student record and get the ID
+            Dim studentId As Integer = CreateStudentRecord(conn, transaction, firstName, lastName, email)
 
-            ' Insert into appropriate table based on role
-            If role = "student" Then
-                relatedId = CreateStudentRecord(conn, transaction, firstName, lastName, email)
-            End If
-
-            ' Insert into users table
-            CreateUserRecord(conn, transaction, email, hashedPassword, role, relatedId)
+            ' Create user record linked to student
+            CreateUserRecord(conn, transaction, email, hashedPassword, role, studentId)
 
             ' Commit transaction
             transaction.Commit()
@@ -264,10 +246,11 @@ Partial Class Register
 
     Private Function CreateStudentRecord(conn As NpgsqlConnection, transaction As NpgsqlTransaction, firstName As String, lastName As String, email As String) As Integer
         Try
+            ' Simplified student record - only essential fields
             Dim query As String = "INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (@fn, @ln, @em, @ed) RETURNING id"
 
             Using cmd As New NpgsqlCommand(query, conn, transaction)
-                cmd.CommandTimeout = 30 ' 30 seconds timeout
+                cmd.CommandTimeout = 30
                 cmd.Parameters.Add("@fn", NpgsqlTypes.NpgsqlDbType.Text).Value = firstName
                 cmd.Parameters.Add("@ln", NpgsqlTypes.NpgsqlDbType.Text).Value = lastName
                 cmd.Parameters.Add("@em", NpgsqlTypes.NpgsqlDbType.Text).Value = email
@@ -277,7 +260,7 @@ Partial Class Register
                 If result IsNot Nothing AndAlso IsNumeric(result) Then
                     Return Convert.ToInt32(result)
                 Else
-                    Throw New Exception("Failed to get student ID after insert - no ID returned")
+                    Throw New Exception("Failed to get student ID after insert")
                 End If
             End Using
         Catch ex As Exception
@@ -285,24 +268,17 @@ Partial Class Register
         End Try
     End Function
 
-
-
-    Private Sub CreateUserRecord(conn As NpgsqlConnection, transaction As NpgsqlTransaction, email As String, hashedPassword As String, role As String, relatedId As Integer)
+    Private Sub CreateUserRecord(conn As NpgsqlConnection, transaction As NpgsqlTransaction, email As String, hashedPassword As String, role As String, studentId As Integer)
         Try
-            Dim query As String = ""
-
-            If role = "student" Then
-                query = "INSERT INTO users (email, password_hash, role, student_id) VALUES (@em, @pw, @rl, @rid)"
-            Else
-                Throw New Exception("Invalid role: " & role)
-            End If
+            ' Create user record linked to student
+            Dim query As String = "INSERT INTO users (email, password_hash, role, student_id) VALUES (@em, @pw, @rl, @sid)"
 
             Using cmd As New NpgsqlCommand(query, conn, transaction)
-                cmd.CommandTimeout = 30 ' 30 seconds timeout
+                cmd.CommandTimeout = 30
                 cmd.Parameters.Add("@em", NpgsqlTypes.NpgsqlDbType.Text).Value = email
                 cmd.Parameters.Add("@pw", NpgsqlTypes.NpgsqlDbType.Text).Value = hashedPassword
                 cmd.Parameters.Add("@rl", NpgsqlTypes.NpgsqlDbType.Text).Value = role
-                cmd.Parameters.Add("@rid", NpgsqlTypes.NpgsqlDbType.Integer).Value = relatedId
+                cmd.Parameters.Add("@sid", NpgsqlTypes.NpgsqlDbType.Integer).Value = studentId
 
                 Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                 If rowsAffected = 0 Then
@@ -352,15 +328,6 @@ Partial Class Register
         txtEmail.Text = ""
         txtPassword.Text = ""
         txtConfirmPassword.Text = ""
-        txtDateOfBirth.Text = ""
-        ddlUserRole.SelectedIndex = 0
-        ddlProgram.SelectedIndex = 0
-        ddlYearLevel.SelectedIndex = 0
-
-
-        ' Hide role-specific panels
-        pnlStudentFields.Visible = False
-
     End Sub
 
 End Class

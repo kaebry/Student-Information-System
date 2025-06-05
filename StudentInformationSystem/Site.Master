@@ -46,14 +46,15 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                                        <ul class="navbar-nav flex-grow-1">
+                                        <!-- Replace the navigation section in Site.Master with this cleaned version -->
+<ul class="navbar-nav flex-grow-1">
     <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
     
     <!-- Show navigation items based on user role -->
     <% If IsUserLoggedIn Then %>
         <% If UserRole = "admin" Then %>
-            <!-- Admin Navigation - Simple Links -->
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">
+            <!-- Admin Navigation -->
+            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageStudents.aspx">
                 <i class="fas fa-user-graduate"></i> Manage Students</a></li>
             <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageCourses.aspx">
                 <i class="fas fa-book"></i> Manage Courses</a></li>
@@ -61,15 +62,6 @@
                 <i class="fas fa-clipboard-list"></i> Manage Enrollments</a></li>
             <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/Reports.aspx">
                 <i class="fas fa-chart-bar"></i> Reports</a></li>
-                
-        <% ElseIf UserRole = "teacher" Then %>
-            <!-- Teacher Navigation -->
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/Teacher/MyCourses.aspx">
-                <i class="fas fa-book"></i> My Courses</a></li>
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/Teacher/ManageGrades.aspx">
-                <i class="fas fa-clipboard-check"></i> Manage Grades</a></li>
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">
-                <i class="fas fa-users"></i> View Students</a></li>
                 
         <% ElseIf UserRole = "student" Then %>
             <!-- Student Navigation -->

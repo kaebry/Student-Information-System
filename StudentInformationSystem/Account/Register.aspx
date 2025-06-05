@@ -4,7 +4,7 @@
     <main aria-labelledby="title">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <h2 id="title" class="text-center mb-4">Create New Account</h2>
                     
                     <!-- Messages -->
@@ -34,62 +34,6 @@
                                         CssClass="text-danger small" ErrorMessage="Last name is required." Display="Dynamic" />
                                 </div>
                             </div>
-
-                            <!-- Role Selection -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="<%= ddlUserRole.ClientID %>" class="form-label">I am registering as <span class="text-danger">*</span></label>
-                                    <asp:DropDownList ID="ddlUserRole" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlUserRole_SelectedIndexChanged">
-                                        <asp:ListItem Text="Select Role" Value="" />
-                                        <asp:ListItem Text="Student" Value="student" />
-                                    </asp:DropDownList>
-                                    <asp:RequiredFieldValidator ID="rfvUserRole" runat="server" ControlToValidate="ddlUserRole" 
-                                        CssClass="text-danger small" ErrorMessage="Please select your role." Display="Dynamic" />
-                                </div>
-                            </div>
-
-                            <!-- Student-specific fields -->
-                            <asp:Panel ID="pnlStudentFields" runat="server" Visible="false">
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle"></i> Student Information
-                                </div>
-                                
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="<%= txtDateOfBirth.ClientID %>" class="form-label">Date of Birth</label>
-                                        <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control" TextMode="Date" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="<%= ddlYearLevel.ClientID %>" class="form-label">Year Level</label>
-                                        <asp:DropDownList ID="ddlYearLevel" runat="server" CssClass="form-select">
-                                            <asp:ListItem Text="Select Year" Value="" />
-                                            <asp:ListItem Text="1st Year" Value="1" />
-                                            <asp:ListItem Text="2nd Year" Value="2" />
-                                            <asp:ListItem Text="3rd Year" Value="3" />
-                                            <asp:ListItem Text="4th Year" Value="4" />
-                                            <asp:ListItem Text="5th Year" Value="5" />
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                                
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <label for="<%= ddlProgram.ClientID %>" class="form-label">Program/Course</label>
-                                        <asp:DropDownList ID="ddlProgram" runat="server" CssClass="form-select">
-                                            <asp:ListItem Text="Select Program" Value="" />
-                                            <asp:ListItem Text="Computer Science" Value="computer_science" />
-                                            <asp:ListItem Text="Information Technology" Value="information_technology" />
-                                            <asp:ListItem Text="Business Administration" Value="business_admin" />
-                                            <asp:ListItem Text="Engineering" Value="engineering" />
-                                            <asp:ListItem Text="Mathematics" Value="mathematics" />
-                                            <asp:ListItem Text="Physics" Value="physics" />
-                                            <asp:ListItem Text="Chemistry" Value="chemistry" />
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                            </asp:Panel>
-
-                          
 
                             <!-- Account Information -->
                             <div class="alert alert-primary">
@@ -128,11 +72,16 @@
                                         CssClass="text-danger small" ErrorMessage="Passwords do not match." Display="Dynamic" />
                                 </div>
                             </div>
+
+                            <!-- User Type Notice -->
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> You are registering as a <strong>Student</strong>
+                            </div>
                             
                             <!-- Submit Button -->
                             <div class="row">
                                 <div class="col-md-12 text-center">
-                                    <asp:Button ID="btnRegister" runat="server" Text="Create Account" 
+                                    <asp:Button ID="btnRegister" runat="server" Text="Create Student Account" 
                                         CssClass="btn btn-primary btn-lg px-5" OnClick="btnRegister_Click" />
                                     <div class="mt-3">
                                         <span class="text-muted">Already have an account? </span>
