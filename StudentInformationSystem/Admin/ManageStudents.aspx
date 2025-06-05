@@ -25,7 +25,7 @@
                                     <label for="<%= txtFirstName.ClientID %>" class="form-label">First Name <span class="text-danger">*</span></label>
                                     <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="Enter first name" MaxLength="50" />
                                     <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" ControlToValidate="txtFirstName" 
-                                        CssClass="text-danger small" ErrorMessage="First name is required." Display="Dynamic" />
+                                        CssClass="text-danger small" ErrorMessage="First name is required." Display="Dynamic" ValidationGroup="StudentForm" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -33,18 +33,18 @@
                                     <label for="<%= txtLastName.ClientID %>" class="form-label">Last Name <span class="text-danger">*</span></label>
                                     <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control" placeholder="Enter last name" MaxLength="50" />
                                     <asp:RequiredFieldValidator ID="rfvLastName" runat="server" ControlToValidate="txtLastName" 
-                                        CssClass="text-danger small" ErrorMessage="Last name is required." Display="Dynamic" />
+                                        CssClass="text-danger small" ErrorMessage="Last name is required." Display="Dynamic" ValidationGroup="StudentForm" />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="<%= txtEmail.ClientID %>" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="Email" placeholder="Enter email address" />
+                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Enter email address" />
                                     <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" 
-                                        CssClass="text-danger small" ErrorMessage="Email is required." Display="Dynamic" />
+                                        CssClass="text-danger small" ErrorMessage="Email is required." Display="Dynamic" ValidationGroup="StudentForm" />
                                     <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="txtEmail" 
                                         CssClass="text-danger small" ErrorMessage="Please enter a valid email address." 
-                                        ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" Display="Dynamic" />
+                                        ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" Display="Dynamic" ValidationGroup="StudentForm" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -52,7 +52,7 @@
                                     <label for="<%= txtEnrollmentDate.ClientID %>" class="form-label">Enrollment Date <span class="text-danger">*</span></label>
                                     <asp:TextBox ID="txtEnrollmentDate" runat="server" TextMode="Date" CssClass="form-control" />
                                     <asp:RequiredFieldValidator ID="rfvEnrollmentDate" runat="server" ControlToValidate="txtEnrollmentDate" 
-                                        CssClass="text-danger small" ErrorMessage="Enrollment date is required." Display="Dynamic" />
+                                        CssClass="text-danger small" ErrorMessage="Enrollment date is required." Display="Dynamic" ValidationGroup="StudentForm" />
                                 </div>
                             </div>
                         </div>
@@ -61,12 +61,13 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <asp:Button ID="btnAdd" runat="server" Text="Add Student" CssClass="btn btn-primary me-2" OnClick="btnCreate_Click" 
-                                    OnClientClick="return confirm('Are you sure you want to add this student?');" />
+                                    ValidationGroup="StudentForm" OnClientClick="return confirm('Are you sure you want to add this student?');" />
                                 <asp:Button ID="btnUpdate" runat="server" Text="Update Student" CssClass="btn btn-warning me-2" OnClick="btnUpdate_Click" 
-                                    Enabled="False" OnClientClick="return confirm('Are you sure you want to update this student?');" />
+                                    ValidationGroup="StudentForm" Enabled="False" OnClientClick="return confirm('Are you sure you want to update this student?');" />
                                 <asp:Button ID="btnDelete" runat="server" Text="Delete Student" CssClass="btn btn-danger me-2" OnClick="btnDelete_Click" 
-                                    Enabled="False" OnClientClick="return confirm('Are you sure you want to delete this student? This action cannot be undone!');" />
-                                <asp:Button ID="btnClear" runat="server" Text="Clear Form" CssClass="btn btn-secondary" OnClick="btnClear_Click" />
+                                    CausesValidation="False" Enabled="False" OnClientClick="return confirm('Are you sure you want to delete this student? This action cannot be undone!');" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear Form" CssClass="btn btn-secondary" OnClick="btnClear_Click" 
+                                    CausesValidation="False" />
                             </div>
                         </div>
                     </div>
@@ -262,6 +263,38 @@
             buttons.forEach(function(button) {
                 button.disabled = false;
             });
+
+            // Disable HTML5 validation for Delete and Clear buttons
+            var deleteBtn = document.getElementById('<%= btnDelete.ClientID %>');
+            var clearBtn = document.getElementById('<%= btnClear.ClientID %>');
+            
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function(e) {
+                    // Temporarily disable HTML5 validation for the form
+                    var form = this.closest('form');
+                    if (form) {
+                        form.setAttribute('novalidate', 'true');
+                        // Re-enable validation after the postback
+                        setTimeout(function() {
+                            form.removeAttribute('novalidate');
+                        }, 100);
+                    }
+                });
+            }
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function(e) {
+                    // Temporarily disable HTML5 validation for the form
+                    var form = this.closest('form');
+                    if (form) {
+                        form.setAttribute('novalidate', 'true');
+                        // Re-enable validation after the postback
+                        setTimeout(function() {
+                            form.removeAttribute('novalidate');
+                        }, 100);
+                    }
+                });
+            }
         });
 
         // Update student count in badge
@@ -271,14 +304,14 @@
                 if (table) {
                     var rows = table.querySelectorAll('tbody tr');
                     var count = 0;
-                    
+
                     // Count only data rows (not empty data row)
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         if (!row.querySelector('td[colspan]')) {
                             count++;
                         }
                     });
-                    
+
                     var badge = document.getElementById('studentCount');
                     if (badge) {
                         badge.textContent = 'Total: ' + count;
@@ -300,7 +333,7 @@
         }
 
         // Auto-hide loading after page load
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             setTimeout(hideLoading, 500);
             updateStudentCount();
         });
@@ -309,8 +342,8 @@
         function validateForm() {
             var isValid = true;
             var requiredFields = document.querySelectorAll('input[data-val-required]');
-            
-            requiredFields.forEach(function(field) {
+
+            requiredFields.forEach(function (field) {
                 if (field.value.trim() === '') {
                     field.classList.add('is-invalid');
                     isValid = false;
@@ -319,7 +352,7 @@
                     field.classList.add('is-valid');
                 }
             });
-            
+
             return isValid;
         }
     </script>
