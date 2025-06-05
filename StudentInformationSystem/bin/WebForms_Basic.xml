@@ -1171,6 +1171,150 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.AvailableCourses._MessagePanel">
+<summary>
+MessagePanel control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._MessageLiteral">
+<summary>
+MessageLiteral control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._lblStudentName">
+<summary>
+lblStudentName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._lblStudentEmail">
+<summary>
+lblStudentEmail control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._lblCurrentEnrollments">
+<summary>
+lblCurrentEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._lblTotalECTS">
+<summary>
+lblTotalECTS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._txtSearchName">
+<summary>
+txtSearchName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._ddlFilterFormat">
+<summary>
+ddlFilterFormat control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._ddlFilterECTS">
+<summary>
+ddlFilterECTS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._btnSearch">
+<summary>
+btnSearch control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._btnClearSearch">
+<summary>
+btnClearSearch control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._lblTotalCourses">
+<summary>
+lblTotalCourses control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._btnRefresh">
+<summary>
+btnRefresh control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._gvCourses">
+<summary>
+gvCourses control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._rpMyEnrollments">
+<summary>
+rpMyEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses._pnlNoEnrollments">
+<summary>
+pnlNoEnrollments control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:StudentInformationSystem.Site_Mobile._Head1">
 <summary>
 Head1 control.
