@@ -20,13 +20,8 @@ Partial Class Register
         Select Case ddlUserRole.SelectedValue.ToLower()
             Case "student"
                 pnlStudentFields.Visible = True
-                pnlTeacherFields.Visible = False
-            Case "teacher"
-                pnlStudentFields.Visible = False
-                pnlTeacherFields.Visible = True
             Case Else
                 pnlStudentFields.Visible = False
-                pnlTeacherFields.Visible = False
         End Select
     End Sub
 
@@ -194,8 +189,6 @@ Partial Class Register
             ' Insert into appropriate table based on role
             If role = "student" Then
                 relatedId = CreateStudentRecord(conn, transaction, firstName, lastName, email)
-            ElseIf role = "teacher" Then
-                relatedId = CreateTeacherRecord(conn, transaction, firstName, lastName, email)
             End If
 
             ' Insert into users table
@@ -292,28 +285,7 @@ Partial Class Register
         End Try
     End Function
 
-    Private Function CreateTeacherRecord(conn As NpgsqlConnection, transaction As NpgsqlTransaction, firstName As String, lastName As String, email As String) As Integer
-        Try
-            Dim query As String = "INSERT INTO teachers (first_name, last_name, email, hire_date) VALUES (@fn, @ln, @em, @hd) RETURNING id"
 
-            Using cmd As New NpgsqlCommand(query, conn, transaction)
-                cmd.CommandTimeout = 30 ' 30 seconds timeout
-                cmd.Parameters.Add("@fn", NpgsqlTypes.NpgsqlDbType.Text).Value = firstName
-                cmd.Parameters.Add("@ln", NpgsqlTypes.NpgsqlDbType.Text).Value = lastName
-                cmd.Parameters.Add("@em", NpgsqlTypes.NpgsqlDbType.Text).Value = email
-                cmd.Parameters.Add("@hd", NpgsqlTypes.NpgsqlDbType.Date).Value = DateTime.Today
-
-                Dim result = cmd.ExecuteScalar()
-                If result IsNot Nothing AndAlso IsNumeric(result) Then
-                    Return Convert.ToInt32(result)
-                Else
-                    Throw New Exception("Failed to get teacher ID after insert - no ID returned")
-                End If
-            End Using
-        Catch ex As Exception
-            Throw New Exception("Failed to create teacher record: " & ex.Message)
-        End Try
-    End Function
 
     Private Sub CreateUserRecord(conn As NpgsqlConnection, transaction As NpgsqlTransaction, email As String, hashedPassword As String, role As String, relatedId As Integer)
         Try
@@ -321,8 +293,6 @@ Partial Class Register
 
             If role = "student" Then
                 query = "INSERT INTO users (email, password_hash, role, student_id) VALUES (@em, @pw, @rl, @rid)"
-            ElseIf role = "teacher" Then
-                query = "INSERT INTO users (email, password_hash, role, teacher_id) VALUES (@em, @pw, @rl, @rid)"
             Else
                 Throw New Exception("Invalid role: " & role)
             End If
@@ -386,11 +356,11 @@ Partial Class Register
         ddlUserRole.SelectedIndex = 0
         ddlProgram.SelectedIndex = 0
         ddlYearLevel.SelectedIndex = 0
-        ddlDepartment.SelectedIndex = 0
+
 
         ' Hide role-specific panels
         pnlStudentFields.Visible = False
-        pnlTeacherFields.Visible = False
+
     End Sub
 
 End Class

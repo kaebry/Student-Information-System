@@ -131,24 +131,6 @@ Partial Public Class Register
     Protected WithEvents ddlProgram As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''pnlTeacherFields control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents pnlTeacherFields As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''ddlDepartment control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddlDepartment As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
     '''txtEmail control.
     '''</summary>
     '''<remarks>

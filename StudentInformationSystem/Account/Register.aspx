@@ -42,7 +42,6 @@
                                     <asp:DropDownList ID="ddlUserRole" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlUserRole_SelectedIndexChanged">
                                         <asp:ListItem Text="Select Role" Value="" />
                                         <asp:ListItem Text="Student" Value="student" />
-                                        <asp:ListItem Text="Teacher" Value="teacher" />
                                     </asp:DropDownList>
                                     <asp:RequiredFieldValidator ID="rfvUserRole" runat="server" ControlToValidate="ddlUserRole" 
                                         CssClass="text-danger small" ErrorMessage="Please select your role." Display="Dynamic" />
@@ -90,28 +89,7 @@
                                 </div>
                             </asp:Panel>
 
-                            <!-- Teacher-specific fields -->
-                            <asp:Panel ID="pnlTeacherFields" runat="server" Visible="false">
-                                <div class="alert alert-success">
-                                    <i class="fas fa-chalkboard-teacher"></i> Teacher Information
-                                </div>
-                                
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <label for="<%= ddlDepartment.ClientID %>" class="form-label">Department</label>
-                                        <asp:DropDownList ID="ddlDepartment" runat="server" CssClass="form-select">
-                                            <asp:ListItem Text="Select Department" Value="" />
-                                            <asp:ListItem Text="Computer Science" Value="computer_science" />
-                                            <asp:ListItem Text="Information Technology" Value="information_technology" />
-                                            <asp:ListItem Text="Business Administration" Value="business_admin" />
-                                            <asp:ListItem Text="Engineering" Value="engineering" />
-                                            <asp:ListItem Text="Mathematics" Value="mathematics" />
-                                            <asp:ListItem Text="Physics" Value="physics" />
-                                            <asp:ListItem Text="Chemistry" Value="chemistry" />
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                            </asp:Panel>
+                          
 
                             <!-- Account Information -->
                             <div class="alert alert-primary">

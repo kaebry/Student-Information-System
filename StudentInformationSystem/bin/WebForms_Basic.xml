@@ -550,24 +550,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.Register._pnlTeacherFields">
-<summary>
-pnlTeacherFields control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.Register._ddlDepartment">
-<summary>
-ddlDepartment control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:StudentInformationSystem.Register._txtEmail">
 <summary>
 txtEmail control.

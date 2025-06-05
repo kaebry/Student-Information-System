@@ -53,8 +53,6 @@
     <% If IsUserLoggedIn Then %>
         <% If UserRole = "admin" Then %>
             <!-- Admin Navigation - Simple Links -->
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageUsers.aspx">
-                <i class="fas fa-users"></i> Manage Users</a></li>
             <li class="nav-item"><a class="nav-link" runat="server" href="~/ManageStudents.aspx">
                 <i class="fas fa-user-graduate"></i> Manage Students</a></li>
             <li class="nav-item"><a class="nav-link" runat="server" href="~/Admin/ManageCourses.aspx">
@@ -75,12 +73,9 @@
                 
         <% ElseIf UserRole = "student" Then %>
             <!-- Student Navigation -->
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/MyEnrollments.aspx">
-                <i class="fas fa-book-open"></i> My Courses</a></li>
             <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/AvailableCourses.aspx">
                 <i class="fas fa-search"></i> Browse Courses</a></li>
-            <li class="nav-item"><a class="nav-link" runat="server" href="~/Student/MyGrades.aspx">
-                <i class="fas fa-trophy"></i> My Grades</a></li>
+            
         <% End If %>
     <% End If %>
 </ul>
