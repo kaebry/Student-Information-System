@@ -6,91 +6,48 @@ Public Class ManageCourses
     Inherits System.Web.UI.Page
 
     Private ReadOnly connStr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+    Private Shared lastPoolClear As DateTime = DateTime.MinValue
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         ' Check admin access
         If Session("UserRole")?.ToString() <> "admin" Then
             Response.Redirect("~/Default.aspx?error=access_denied")
+            Return
         End If
 
         If Not IsPostBack Then
-            ' Auto-clear pools to prevent stale connections (Supabase fix)
-            Try
+            ' Only clear pools if it's been more than 30 seconds since last clear
+            If DateTime.Now.Subtract(lastPoolClear).TotalSeconds > 30 Then
                 NpgsqlConnection.ClearAllPools()
-                System.Threading.Thread.Sleep(300) ' Shorter wait
-            Catch
-                ' Ignore pool clearing errors
-            End Try
+                lastPoolClear = DateTime.Now
+                System.Threading.Thread.Sleep(100)
+            End If
 
-            LoadCourses()
-            UpdateTotalCoursesLabel()
+            ' Try simple loading first
+            Try
+                LoadCoursesSimple()
+            Catch ex As Exception
+                ShowMessage($"⚠️ Page load issue: {ex.Message}. Try clicking '🔧 Load Simple' or '🔄 Refresh List'", "alert alert-warning")
+            End Try
         End If
     End Sub
 
-    Private Function GetRobustConnection() As NpgsqlConnection
-        Dim enhancedConnStr As String = connStr
-
-        ' Ensure clean connection parameters
-        If Not enhancedConnStr.Contains("Connection Lifetime") Then
-            enhancedConnStr &= ";Connection Lifetime=30;Maximum Pool Size=10;Minimum Pool Size=1;Connection Idle Lifetime=30;"
-        End If
-
-        Dim conn As New NpgsqlConnection(enhancedConnStr)
-
-        Try
-            conn.Open()
-
-            ' Always test connection before returning it
-            Using testCmd As New NpgsqlCommand("SELECT 1", conn)
-                testCmd.CommandTimeout = 5
-                testCmd.ExecuteScalar()
-            End Using
-
-            Return conn
-
-        Catch
-            ' If connection fails, clean up and try with fresh pool
-            Try
-                If conn.State = ConnectionState.Open Then
-                    conn.Close()
-                End If
-                conn.Dispose()
-            Catch
-            End Try
-
-            ' Clear pools and create fresh connection
-            NpgsqlConnection.ClearAllPools()
-            System.Threading.Thread.Sleep(500)
-
-            conn = New NpgsqlConnection(enhancedConnStr)
-            conn.Open()
-
-            ' Test the fresh connection
-            Using testCmd As New NpgsqlCommand("SELECT 1", conn)
-                testCmd.CommandTimeout = 5
-                testCmd.ExecuteScalar()
-            End Using
-
-            Return conn
-        End Try
-    End Function
-
+    ' Simplified and faster LoadCourses method with retry logic
     Private Sub LoadCourses(Optional searchName As String = "", Optional filterFormat As String = "", Optional searchInstructor As String = "")
-        Dim dt As New DataTable()
-        Dim retryCount As Integer = 0
         Dim maxRetries As Integer = 3
+        Dim retryCount As Integer = 0
 
         While retryCount < maxRetries
             Try
-                Using conn As NpgsqlConnection = GetRobustConnection()
+                If retryCount > 0 Then
+                    NpgsqlConnection.ClearAllPools()
+                    System.Threading.Thread.Sleep(1000 * retryCount) ' Longer wait for retries
+                End If
+
+                Using conn As New NpgsqlConnection(connStr)
                     conn.Open()
 
-                    ' Test connection
-                    Using testCmd As New NpgsqlCommand("SELECT 1", conn)
-                        testCmd.CommandTimeout = 10
-                        testCmd.ExecuteScalar()
-                    End Using
-
+                    ' Use simple query without enrollment counts
                     Dim query As String = "SELECT course_id, course_name, ects, hours, format, instructor FROM courses WHERE 1=1"
 
                     ' Add search conditions
@@ -109,7 +66,7 @@ Public Class ManageCourses
                     query &= " ORDER BY course_name"
 
                     Using cmd As New NpgsqlCommand(query, conn)
-                        cmd.CommandTimeout = 30
+                        cmd.CommandTimeout = 10
 
                         ' Add parameters
                         If Not String.IsNullOrEmpty(searchName) Then
@@ -125,142 +82,242 @@ Public Class ManageCourses
                         End If
 
                         Using adapter As New NpgsqlDataAdapter(cmd)
+                            Dim dt As New DataTable()
                             adapter.Fill(dt)
+
+                            gvCourses.DataSource = dt
+                            gvCourses.DataBind()
+                            lblTotalCourses.Text = $"Total: {dt.Rows.Count}"
+
+                            If dt.Rows.Count = 0 Then
+                                ShowMessage("No courses found matching your criteria.", "alert alert-info")
+                            Else
+                                HideMessage()
+                            End If
                         End Using
                     End Using
                 End Using
 
-                ' If we reach here, the operation was successful
-                gvCourses.DataSource = dt
-                gvCourses.DataBind()
-                UpdateTotalCoursesLabel(dt.Rows.Count)
-                Return ' Exit the retry loop
+                ' If we reach here, success! Exit retry loop
+                Return
+
+            Catch ex As NpgsqlException When ex.Message.Contains("Exception while reading from stream") Or ex.Message.Contains("stream")
+                retryCount += 1
+                If retryCount >= maxRetries Then
+                    ShowMessage($"❌ Connection failed after {maxRetries} attempts. Database may be temporarily unavailable.", "alert alert-danger")
+                Else
+                    ShowMessage($"🔄 Connection issue, retrying... (attempt {retryCount + 1})", "alert alert-warning")
+                End If
 
             Catch ex As Exception
-                retryCount += 1
-
-                If retryCount >= maxRetries Then
-                    ShowMessage($"❌ Failed to load courses after {maxRetries} attempts: {ex.Message}", "alert alert-danger")
-
-                    ' Create empty DataTable to prevent further errors
-                    dt = New DataTable()
-                    dt.Columns.Add("course_id", GetType(Integer))
-                    dt.Columns.Add("course_name", GetType(String))
-                    dt.Columns.Add("ects", GetType(Integer))
-                    dt.Columns.Add("hours", GetType(Integer))
-                    dt.Columns.Add("format", GetType(String))
-                    dt.Columns.Add("instructor", GetType(String))
-
-                    gvCourses.DataSource = dt
-                    gvCourses.DataBind()
-                    UpdateTotalCoursesLabel(0)
-                Else
-                    ' Wait before retry
-                    System.Threading.Thread.Sleep(1000 * retryCount)
-                    NpgsqlConnection.ClearAllPools()
-                    System.Threading.Thread.Sleep(500)
-                End If
+                ShowMessage($"❌ Failed to load courses: {ex.Message}", "alert alert-danger")
+                Exit While ' Don't retry for non-stream errors
             End Try
         End While
+
+        ' If all retries failed, show empty grid
+        Try
+            Dim emptyDt As New DataTable()
+            emptyDt.Columns.Add("course_id", GetType(Integer))
+            emptyDt.Columns.Add("course_name", GetType(String))
+            emptyDt.Columns.Add("ects", GetType(Integer))
+            emptyDt.Columns.Add("hours", GetType(Integer))
+            emptyDt.Columns.Add("format", GetType(String))
+            emptyDt.Columns.Add("instructor", GetType(String))
+
+            gvCourses.DataSource = emptyDt
+            gvCourses.DataBind()
+            lblTotalCourses.Text = "Total: 0"
+        Catch
+            ' If even this fails, just clear the grid
+            gvCourses.DataSource = Nothing
+            gvCourses.DataBind()
+        End Try
     End Sub
 
-    Protected Sub btnAdd_Click(sender As Object, e As EventArgs)
-        If Not Page.IsValid Then
-            Return
-        End If
 
-        Dim retryCount As Integer = 0
+
+    ' Simple connection helper method
+    Private Function GetWorkingConnection() As NpgsqlConnection
+        ' Clear pools first
+        NpgsqlConnection.ClearAllPools()
+        System.Threading.Thread.Sleep(500)
+
+        Dim conn As New NpgsqlConnection(connStr)
+        conn.Open()
+        Return conn
+    End Function
+
+    ' Simple and fast LoadCourses method
+    Private Sub LoadCoursesSimple(Optional searchName As String = "", Optional filterFormat As String = "", Optional searchInstructor As String = "")
+        Try
+            Using conn As NpgsqlConnection = GetWorkingConnection()
+                ' Use simple query without enrollment counts
+                Dim query As String = "SELECT course_id, course_name, ects, hours, format, instructor FROM courses ORDER BY course_name"
+
+                Using cmd As New NpgsqlCommand(query, conn)
+                    cmd.CommandTimeout = 5 ' Very short timeout
+
+                    Using adapter As New NpgsqlDataAdapter(cmd)
+                        Dim dt As New DataTable()
+                        adapter.Fill(dt)
+
+                        gvCourses.DataSource = dt
+                        gvCourses.DataBind()
+                        lblTotalCourses.Text = $"Total: {dt.Rows.Count}"
+
+                        HideMessage()
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            ShowMessage($"❌ Error loading courses: {ex.Message}", "alert alert-danger")
+
+            ' Show empty grid
+            Try
+                Dim emptyDt As New DataTable()
+                emptyDt.Columns.Add("course_id", GetType(Integer))
+                emptyDt.Columns.Add("course_name", GetType(String))
+                emptyDt.Columns.Add("ects", GetType(Integer))
+                emptyDt.Columns.Add("hours", GetType(Integer))
+                emptyDt.Columns.Add("format", GetType(String))
+                emptyDt.Columns.Add("instructor", GetType(String))
+
+                gvCourses.DataSource = emptyDt
+                gvCourses.DataBind()
+                lblTotalCourses.Text = "Total: 0"
+            Catch
+            End Try
+        End Try
+    End Sub
+    Private Function ExecuteWithRetry(query As String, parameters As Dictionary(Of String, Object)) As Boolean
         Dim maxRetries As Integer = 3
+        Dim retryCount As Integer = 0
 
         While retryCount < maxRetries
             Try
-                Using conn As NpgsqlConnection = GetRobustConnection()
-                    conn.Open()
-
-                    Using cmd As New NpgsqlCommand("INSERT INTO courses (course_name, ects, hours, format, instructor) VALUES (@name, @ects, @hours, @format, @instructor)", conn)
-                        cmd.CommandTimeout = 30
-                        cmd.Parameters.AddWithValue("@name", txtCourseName.Text.Trim())
-                        cmd.Parameters.AddWithValue("@ects", Convert.ToInt32(txtECTS.Text))
-                        cmd.Parameters.AddWithValue("@hours", Convert.ToInt32(txtHours.Text))
-                        cmd.Parameters.AddWithValue("@format", ddlFormat.SelectedValue)
-                        cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text.Trim())
-
-                        cmd.ExecuteNonQuery()
-                    End Using
-                End Using
-
-                ShowMessage("✅ Course added successfully!", "alert alert-success")
-                ClearForm()
-                LoadCourses()
-                UpdateTotalCoursesLabel()
-                Return ' Exit retry loop
-
-            Catch ex As Exception
-                retryCount += 1
-                If retryCount >= maxRetries Then
-                    ShowMessage($"❌ Failed to add course after {maxRetries} attempts: {ex.Message}", "alert alert-danger")
-                Else
-                    System.Threading.Thread.Sleep(1000 * retryCount)
+                If retryCount > 0 Then
                     NpgsqlConnection.ClearAllPools()
                     System.Threading.Thread.Sleep(500)
                 End If
+
+                Using conn As New NpgsqlConnection(connStr)
+                    conn.Open()
+
+                    Using cmd As New NpgsqlCommand(query, conn)
+                        cmd.CommandTimeout = 10
+
+                        ' Add parameters
+                        For Each param In parameters
+                            cmd.Parameters.AddWithValue(param.Key, param.Value)
+                        Next
+
+                        Return cmd.ExecuteNonQuery() > 0
+                    End Using
+                End Using
+
+            Catch ex As NpgsqlException When ex.Message.Contains("Exception while reading from stream") Or ex.Message.Contains("stream")
+                retryCount += 1
+                If retryCount >= maxRetries Then
+                    Throw New Exception($"Database operation failed after {maxRetries} attempts due to connection issues")
+                End If
             End Try
         End While
+
+        Return False
+    End Function
+
+    Protected Sub btnAdd_Click(sender As Object, e As EventArgs)
+        If Not Page.IsValid Then Return
+
+        Try
+            ' Check if course with same name already exists
+            Dim courseName As String = txtCourseName.Text.Trim()
+
+            Try
+                Using conn As New NpgsqlConnection(connStr)
+                    conn.Open()
+                    Using checkCmd As New NpgsqlCommand("SELECT COUNT(*) FROM courses WHERE LOWER(course_name) = LOWER(@name)", conn)
+                        checkCmd.CommandTimeout = 5
+                        checkCmd.Parameters.AddWithValue("@name", courseName)
+                        Dim existingCount As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+
+                        If existingCount > 0 Then
+                            ShowMessage("❌ A course with this name already exists. Please choose a different name.", "alert alert-danger")
+                            Return
+                        End If
+                    End Using
+                End Using
+            Catch
+                ' If duplicate check fails, proceed but warn
+                ShowMessage("⚠️ Could not verify duplicates. Adding course...", "alert alert-warning")
+            End Try
+
+            Dim parameters As New Dictionary(Of String, Object) From {
+                {"@name", courseName},
+                {"@ects", Convert.ToInt32(txtECTS.Text)},
+                {"@hours", Convert.ToInt32(txtHours.Text)},
+                {"@format", ddlFormat.SelectedValue},
+                {"@instructor", txtInstructor.Text.Trim()}
+            }
+
+            Dim query As String = "INSERT INTO courses (course_name, ects, hours, format, instructor) VALUES (@name, @ects, @hours, @format, @instructor)"
+
+            If ExecuteWithRetry(query, parameters) Then
+                ShowMessage("✅ Course added successfully!", "alert alert-success")
+                ClearForm()
+
+                ' Try to refresh, but don't fail if it doesn't work
+                Try
+                    LoadCoursesSimple()
+                Catch loadEx As Exception
+                    ShowMessage("✅ Course added successfully! Please click '🔧 Load Simple' to see the new course.", "alert alert-warning")
+                End Try
+            Else
+                ShowMessage("❌ Failed to add course.", "alert alert-danger")
+            End If
+
+        Catch ex As Exception
+            ShowMessage($"❌ Error adding course: {ex.Message}", "alert alert-danger")
+        End Try
     End Sub
 
     Protected Sub btnUpdate_Click(sender As Object, e As EventArgs)
-        If Not Page.IsValid Then
-            Return
-        End If
-
+        If Not Page.IsValid Then Return
         If ViewState("SelectedCourseId") Is Nothing Then
             ShowMessage("❌ No course selected for update.", "alert alert-danger")
             Return
         End If
 
-        Dim retryCount As Integer = 0
-        Dim maxRetries As Integer = 3
+        Try
+            Dim parameters As New Dictionary(Of String, Object) From {
+                {"@name", txtCourseName.Text.Trim()},
+                {"@ects", Convert.ToInt32(txtECTS.Text)},
+                {"@hours", Convert.ToInt32(txtHours.Text)},
+                {"@format", ddlFormat.SelectedValue},
+                {"@instructor", txtInstructor.Text.Trim()},
+                {"@id", CInt(ViewState("SelectedCourseId"))}
+            }
 
-        While retryCount < maxRetries
-            Try
-                Dim courseId As Integer = CInt(ViewState("SelectedCourseId"))
+            Dim query As String = "UPDATE courses SET course_name = @name, ects = @ects, hours = @hours, format = @format, instructor = @instructor WHERE course_id = @id"
 
-                Using conn As NpgsqlConnection = GetRobustConnection()
-                    conn.Open()
+            If ExecuteWithRetry(query, parameters) Then
+                ShowMessage("✅ Course updated successfully!", "alert alert-info")
+                ClearForm()
 
-                    Using cmd As New NpgsqlCommand("UPDATE courses SET course_name = @name, ects = @ects, hours = @hours, format = @format, instructor = @instructor WHERE course_id = @id", conn)
-                        cmd.CommandTimeout = 30
-                        cmd.Parameters.AddWithValue("@name", txtCourseName.Text.Trim())
-                        cmd.Parameters.AddWithValue("@ects", Convert.ToInt32(txtECTS.Text))
-                        cmd.Parameters.AddWithValue("@hours", Convert.ToInt32(txtHours.Text))
-                        cmd.Parameters.AddWithValue("@format", ddlFormat.SelectedValue)
-                        cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text.Trim())
-                        cmd.Parameters.AddWithValue("@id", courseId)
+                Try
+                    LoadCourses()
+                Catch loadEx As Exception
+                    ShowMessage("✅ Course updated successfully! Please click '🔄 Refresh List' to see changes.", "alert alert-warning")
+                End Try
+            Else
+                ShowMessage("❌ Course not found or no changes made.", "alert alert-warning")
+            End If
 
-                        Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
-
-                        If rowsAffected > 0 Then
-                            ShowMessage("✅ Course updated successfully!", "alert alert-info")
-                            ClearForm()
-                            LoadCourses()
-                        Else
-                            ShowMessage("❌ Course not found or no changes made.", "alert alert-warning")
-                        End If
-                    End Using
-                End Using
-                Return ' Exit retry loop
-
-            Catch ex As Exception
-                retryCount += 1
-                If retryCount >= maxRetries Then
-                    ShowMessage($"❌ Failed to update course after {maxRetries} attempts: {ex.Message}", "alert alert-danger")
-                Else
-                    System.Threading.Thread.Sleep(1000 * retryCount)
-                    NpgsqlConnection.ClearAllPools()
-                    System.Threading.Thread.Sleep(500)
-                End If
-            End Try
-        End While
+        Catch ex As Exception
+            ShowMessage($"❌ Error updating course: {ex.Message}", "alert alert-danger")
+        End Try
     End Sub
 
     Protected Sub btnDelete_Click(sender As Object, e As EventArgs)
@@ -269,57 +326,59 @@ Public Class ManageCourses
             Return
         End If
 
-        Dim retryCount As Integer = 0
-        Dim maxRetries As Integer = 3
+        Try
+            Dim courseId As Integer = CInt(ViewState("SelectedCourseId"))
 
-        While retryCount < maxRetries
+            ' Simplified delete - just check enrollments with simple query, then delete
+            Dim enrollmentCount As Integer = 0
             Try
-                Dim courseId As Integer = CInt(ViewState("SelectedCourseId"))
-
-                ' Check if course has enrollments
-                Dim enrollmentCount As Integer = GetEnrolledStudentsCount(courseId)
-                If enrollmentCount > 0 Then
-                    ShowMessage($"❌ Cannot delete course. It has {enrollmentCount} enrolled student(s). Please remove enrollments first.", "alert alert-danger")
-                    Return
-                End If
-
-                Using conn As NpgsqlConnection = GetRobustConnection()
+                ' Simple enrollment check
+                Using conn As New NpgsqlConnection(connStr)
                     conn.Open()
-
-                    Using cmd As New NpgsqlCommand("DELETE FROM courses WHERE course_id = @id", conn)
-                        cmd.CommandTimeout = 30
+                    Using cmd As New NpgsqlCommand("SELECT COUNT(*) FROM enrollments WHERE course_id = @id", conn)
+                        cmd.CommandTimeout = 5
                         cmd.Parameters.AddWithValue("@id", courseId)
-
-                        Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
-
-                        If rowsAffected > 0 Then
-                            ShowMessage("🗑️ Course deleted successfully.", "alert alert-warning")
-                            ClearForm()
-                            LoadCourses()
-                            UpdateTotalCoursesLabel()
-                        Else
-                            ShowMessage("❌ Course not found.", "alert alert-danger")
-                        End If
+                        enrollmentCount = Convert.ToInt32(cmd.ExecuteScalar())
                     End Using
                 End Using
-                Return ' Exit retry loop
 
-            Catch ex As Exception
-                retryCount += 1
-                If retryCount >= maxRetries Then
-                    ShowMessage($"❌ Failed to delete course after {maxRetries} attempts: {ex.Message}", "alert alert-danger")
-                Else
-                    System.Threading.Thread.Sleep(1000 * retryCount)
-                    NpgsqlConnection.ClearAllPools()
-                    System.Threading.Thread.Sleep(500)
+                If enrollmentCount > 0 Then
+                    ShowMessage($"❌ Cannot delete course. It has {enrollmentCount} enrolled student(s).", "alert alert-danger")
+                    Return
                 End If
+            Catch
+                ' If enrollment check fails, warn but allow deletion
+                ShowMessage("⚠️ Could not verify enrollments. Proceeding with deletion...", "alert alert-warning")
             End Try
-        End While
+
+            ' Delete the course using reliable method
+            Dim parameters As New Dictionary(Of String, Object) From {
+                {"@id", courseId}
+            }
+
+            Dim deleteQuery As String = "DELETE FROM courses WHERE course_id = @id"
+
+            If ExecuteWithRetry(deleteQuery, parameters) Then
+                ShowMessage("🗑️ Course deleted successfully.", "alert alert-warning")
+                ClearForm()
+
+                Try
+                    LoadCoursesSimple()
+                Catch loadEx As Exception
+                    ShowMessage("🗑️ Course deleted successfully! Please click '🔧 Load Simple' to refresh the list.", "alert alert-warning")
+                End Try
+            Else
+                ShowMessage("❌ Course not found or could not be deleted.", "alert alert-danger")
+            End If
+
+        Catch ex As Exception
+            ShowMessage($"❌ Error deleting course: {ex.Message}", "alert alert-danger")
+        End Try
     End Sub
 
     Protected Sub btnClear_Click(sender As Object, e As EventArgs)
         ClearForm()
-        ShowMessage("", "")
+        HideMessage()
     End Sub
 
     Protected Sub btnSearch_Click(sender As Object, e As EventArgs)
@@ -333,104 +392,76 @@ Public Class ManageCourses
         LoadCourses()
     End Sub
 
-    ' Debug methods (remove after fixing connection issues)
+    ' Debug/Tool methods
     Protected Sub btnTestConnection_Click(sender As Object, e As EventArgs)
         Try
-            ShowMessage("🔄 Testing database connection...", "alert alert-info")
-
-            Using conn As NpgsqlConnection = GetRobustConnection()
+            Using conn As New NpgsqlConnection(connStr)
                 conn.Open()
-
-                Using cmd As New NpgsqlCommand("SELECT version(), current_database(), current_user", conn)
-                    cmd.CommandTimeout = 10
-                    Using reader As NpgsqlDataReader = cmd.ExecuteReader()
+                Using cmd As New NpgsqlCommand("SELECT current_database(), current_user", conn)
+                    Using reader = cmd.ExecuteReader()
                         If reader.Read() Then
-                            Dim version As String = reader(0).ToString()
-                            Dim database As String = reader(1).ToString()
-                            Dim user As String = reader(2).ToString()
-
-                            ShowMessage($"✅ Connection successful!<br/>" &
-                                      $"<strong>Database:</strong> {database}<br/>" &
-                                      $"<strong>User:</strong> {user}<br/>" &
-                                      $"<strong>Version:</strong> {version.Substring(0, Math.Min(50, version.Length))}...", "alert alert-success")
+                            ShowMessage($"✅ Connection successful! Database: {reader(0)}, User: {reader(1)}", "alert alert-success")
                         End If
                     End Using
                 End Using
             End Using
-
         Catch ex As Exception
-            ShowMessage($"❌ Connection test failed: {ex.Message}", "alert alert-danger")
+            ShowMessage($"❌ Connection failed: {ex.Message}", "alert alert-danger")
         End Try
     End Sub
 
     Protected Sub btnClearPools_Click(sender As Object, e As EventArgs)
-        Try
-            NpgsqlConnection.ClearAllPools()
-            System.Threading.Thread.Sleep(1000)
-            ShowMessage("✅ Connection pools cleared successfully!", "alert alert-success")
-        Catch ex As Exception
-            ShowMessage($"❌ Error clearing pools: {ex.Message}", "alert alert-danger")
-        End Try
+        NpgsqlConnection.ClearAllPools()
+        lastPoolClear = DateTime.Now
+        ShowMessage("✅ Connection pools cleared!", "alert alert-success")
     End Sub
 
     Protected Sub btnForceReload_Click(sender As Object, e As EventArgs)
-        Try
-            ShowMessage("🔄 Force reloading courses...", "alert alert-info")
-
-            ' Clear pools first
-            NpgsqlConnection.ClearAllPools()
-            System.Threading.Thread.Sleep(500)
-
-            ' Force reload
-            LoadCourses()
-
-            ShowMessage("✅ Courses reloaded successfully!", "alert alert-success")
-        Catch ex As Exception
-            ShowMessage($"❌ Force reload failed: {ex.Message}", "alert alert-danger")
-        End Try
+        LoadCourses()
+        ShowMessage("✅ Courses reloaded!", "alert alert-success")
     End Sub
 
+    Protected Sub btnLoadWithHelper_Click(sender As Object, e As EventArgs)
+        LoadCoursesSimple()
+        ShowMessage("✅ Courses loaded with simple method!", "alert alert-success")
+    End Sub
+
+    ' GridView event handlers
     Protected Sub gvCourses_SelectedIndexChanged(sender As Object, e As EventArgs)
         Try
             Dim row As GridViewRow = gvCourses.SelectedRow
             If row IsNot Nothing Then
-                txtCourseName.Text = HttpUtility.HtmlDecode(row.Cells(1).Text)
-                txtECTS.Text = row.Cells(2).Text
-                txtHours.Text = row.Cells(3).Text
+                txtCourseName.Text = HttpUtility.HtmlDecode(row.Cells(1).Text.Trim())
+                txtECTS.Text = row.Cells(2).Text.Trim()
+                txtHours.Text = row.Cells(3).Text.Trim()
 
-                ' Extract format from HTML badge
-                Dim formatCell As String = row.Cells(4).Text
-                Dim format As String = ExtractFormatFromBadge(formatCell)
-                ddlFormat.SelectedValue = format
+                ' Get format value directly from the data
+                Dim formatValue As String = ExtractFormatFromBadge(row.Cells(4).Text)
+                ddlFormat.SelectedValue = formatValue
 
-                txtInstructor.Text = HttpUtility.HtmlDecode(row.Cells(5).Text)
+                txtInstructor.Text = HttpUtility.HtmlDecode(row.Cells(5).Text.Trim())
 
                 ViewState("SelectedCourseId") = gvCourses.DataKeys(gvCourses.SelectedIndex).Value
                 btnUpdate.Enabled = True
                 btnDelete.Enabled = True
                 lblFormMode.Text = "Edit Course"
-                lblFormMode.CssClass = "badge badge-warning ml-2"
+                lblFormMode.CssClass = "badge badge-warning ml-2 text-dark"
 
-                ShowMessage($"📝 Course selected for editing: {txtCourseName.Text}", "alert alert-info")
+                ShowMessage($"📝 Course selected: {txtCourseName.Text}", "alert alert-info")
             End If
         Catch ex As Exception
-            ShowMessage("❌ Error selecting course: " & ex.Message, "alert alert-danger")
+            ShowMessage($"❌ Selection error: {ex.Message}", "alert alert-danger")
+            ClearForm()
         End Try
     End Sub
 
     Private Function ExtractFormatFromBadge(badgeHtml As String) As String
-        ' Extract format from badge HTML like "<span class='badge badge-primary'>Lecture</span>"
         Try
-            If badgeHtml.Contains(">") Then
-                Dim startPos As Integer = badgeHtml.LastIndexOf(">") + 1
-                Dim endPos As Integer = badgeHtml.LastIndexOf("<")
-                If startPos > 0 AndAlso endPos > startPos Then
-                    Return badgeHtml.Substring(startPos, endPos - startPos).ToLower()
-                End If
-            End If
-            Return badgeHtml.ToLower()
+            ' Simple regex to extract text between > and <
+            Dim cleanText As String = System.Text.RegularExpressions.Regex.Replace(badgeHtml, "<.*?>", "").Trim()
+            Return cleanText.ToLower()
         Catch
-            Return badgeHtml.ToLower()
+            Return "lecture" ' Safe default
         End Try
     End Function
 
@@ -442,56 +473,26 @@ Public Class ManageCourses
 
             Select Case originalFormat
                 Case "lecture"
-                    formatCell.Text = "<span class='badge badge-primary'>Lecture</span>"
+                    formatCell.Text = "<span class='badge badge-primary text-dark'>Lecture</span>"
                 Case "seminar"
-                    formatCell.Text = "<span class='badge badge-success'>Seminar</span>"
+                    formatCell.Text = "<span class='badge badge-success text-dark'>Seminar</span>"
                 Case "workshop"
-                    formatCell.Text = "<span class='badge badge-info'>Workshop</span>"
+                    formatCell.Text = "<span class='badge badge-info text-dark'>Workshop</span>"
                 Case "laboratory"
-                    formatCell.Text = "<span class='badge badge-warning'>Laboratory</span>"
+                    formatCell.Text = "<span class='badge badge-warning text-dark'>Laboratory</span>"
                 Case "online"
-                    formatCell.Text = "<span class='badge badge-secondary'>Online</span>"
+                    formatCell.Text = "<span class='badge badge-secondary text-dark'>Online</span>"
                 Case "hybrid"
-                    formatCell.Text = "<span class='badge badge-dark'>Hybrid</span>"
+                    formatCell.Text = "<span class='badge badge-dark text-dark'>Hybrid</span>"
                 Case "practical"
                     formatCell.Text = "<span class='badge badge-light text-dark'>Practical</span>"
                 Case Else
-                    formatCell.Text = $"<span class='badge badge-secondary'>{originalFormat.Substring(0, 1).ToUpper() + originalFormat.Substring(1)}</span>"
+                    formatCell.Text = $"<span class='badge badge-secondary text-dark'>{originalFormat.Substring(0, 1).ToUpper() + originalFormat.Substring(1)}</span>"
             End Select
         End If
     End Sub
 
-    Protected Function GetEnrolledStudentsCount(courseId As Object) As Integer
-        If courseId Is Nothing Then Return 0
-
-        Dim retryCount As Integer = 0
-        Dim maxRetries As Integer = 2
-
-        While retryCount < maxRetries
-            Try
-                Using conn As NpgsqlConnection = GetRobustConnection()
-                    conn.Open()
-
-                    Using cmd As New NpgsqlCommand("SELECT COUNT(*) FROM enrollments WHERE course_id = @courseId", conn)
-                        cmd.CommandTimeout = 15
-                        cmd.Parameters.AddWithValue("@courseId", Convert.ToInt32(courseId))
-                        Return Convert.ToInt32(cmd.ExecuteScalar())
-                    End Using
-                End Using
-            Catch
-                retryCount += 1
-                If retryCount >= maxRetries Then
-                    Return 0 ' Return 0 if we can't get the count
-                Else
-                    System.Threading.Thread.Sleep(500)
-                    NpgsqlConnection.ClearAllPools()
-                End If
-            End Try
-        End While
-
-        Return 0
-    End Function
-
+    ' Helper methods
     Private Sub ClearForm()
         txtCourseName.Text = ""
         txtECTS.Text = ""
@@ -503,50 +504,17 @@ Public Class ManageCourses
         btnDelete.Enabled = False
         lblFormMode.Text = "Add New Course"
         lblFormMode.CssClass = "badge badge-secondary ml-2"
-
-        ' Clear GridView selection
         gvCourses.SelectedIndex = -1
     End Sub
 
-    Private Sub UpdateTotalCoursesLabel(Optional count As Integer = -1)
-        If count = -1 Then
-            Dim retryCount As Integer = 0
-            Dim maxRetries As Integer = 2
-
-            While retryCount < maxRetries
-                Try
-                    Using conn As NpgsqlConnection = GetRobustConnection()
-                        conn.Open()
-
-                        Using cmd As New NpgsqlCommand("SELECT COUNT(*) FROM courses", conn)
-                            cmd.CommandTimeout = 15
-                            count = Convert.ToInt32(cmd.ExecuteScalar())
-                        End Using
-                    End Using
-                    Exit While ' Success, exit retry loop
-                Catch
-                    retryCount += 1
-                    If retryCount >= maxRetries Then
-                        count = 0
-                    Else
-                        System.Threading.Thread.Sleep(500)
-                        NpgsqlConnection.ClearAllPools()
-                    End If
-                End Try
-            End While
-        End If
-
-        lblTotalCourses.Text = $"Total: {count}"
+    Private Sub ShowMessage(message As String, cssClass As String)
+        MessageLiteral.Text = $"<div class='{cssClass}' role='alert'>{message}</div>"
+        MessagePanel.Visible = True
     End Sub
 
-    Private Sub ShowMessage(message As String, cssClass As String)
-        If String.IsNullOrEmpty(message) Then
-            MessagePanel.Visible = False
-            MessageLiteral.Text = ""
-        Else
-            MessageLiteral.Text = $"<div class='{cssClass}' role='alert'>{message}</div>"
-            MessagePanel.Visible = True
-        End If
+    Private Sub HideMessage()
+        MessagePanel.Visible = False
+        MessageLiteral.Text = ""
     End Sub
 
 End Class

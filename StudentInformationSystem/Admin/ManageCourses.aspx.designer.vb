@@ -230,33 +230,6 @@ Partial Public Class ManageCourses
     Protected WithEvents btnClearSearch As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''btnTestConnection control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnTestConnection As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''btnClearPools control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnClearPools As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''btnForceReload control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnForceReload As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
     '''lblTotalCourses control.
     '''</summary>
     '''<remarks>

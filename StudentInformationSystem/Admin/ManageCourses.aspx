@@ -18,7 +18,7 @@
                     <div class="card-header">
                         <h4 class="mb-0">
                             <i class="fas fa-plus-circle"></i> Course Information
-                            <asp:Label ID="lblFormMode" runat="server" CssClass="badge badge-secondary ml-2" Text="Add New Course" />
+                            <asp:Label ID="lblFormMode" runat="server" CssClass="badge badge-secondary ml-2 text-dark" Text="Add New Course" />
                         </h4>
                     </div>
                     <div class="card-body">
@@ -136,25 +136,14 @@
                                 <div class="mb-3">
                                     <label class="form-label">&nbsp;</label>
                                     <div>
-                                        <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-info btn-sm" OnClick="btnSearch_Click" />
-                                        <asp:Button ID="btnClearSearch" runat="server" Text="Clear" CssClass="btn btn-outline-secondary btn-sm" OnClick="btnClearSearch_Click" />
+                                        <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-info btn-sm me-1" OnClick="btnSearch_Click" CausesValidation="false" />
+                                        <asp:Button ID="btnClearSearch" runat="server" Text="Clear" CssClass="btn btn-outline-secondary btn-sm" OnClick="btnClearSearch_Click" CausesValidation="false"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Debug Tools (Remove after fixing) -->
-                        <div class="row mt-3" style="border-top: 1px solid #dee2e6; padding-top: 15px;">
-                            <div class="col-md-12">
-                                <h6 class="text-muted">🔧 Debug Tools:</h6>
-                                <asp:Button ID="btnTestConnection" runat="server" Text="Test Database Connection" 
-                                            CssClass="btn btn-warning btn-sm me-2" OnClick="btnTestConnection_Click" />
-                                <asp:Button ID="btnClearPools" runat="server" Text="Clear Connection Pools" 
-                                            CssClass="btn btn-secondary btn-sm me-2" OnClick="btnClearPools_Click" />
-                                <asp:Button ID="btnForceReload" runat="server" Text="Force Reload Courses" 
-                                            CssClass="btn btn-primary btn-sm" OnClick="btnForceReload_Click" />
-                            </div>
-                        </div>
+                      
                     </div>
                 </div>
 
@@ -182,17 +171,10 @@
                                         ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" ItemStyle-Width="100px" />
                                     <asp:BoundField DataField="instructor" HeaderText="Instructor" 
                                         HeaderStyle-CssClass="text-start" ItemStyle-Width="150px" />
-                                    <asp:TemplateField HeaderText="Enrolled Students" HeaderStyle-CssClass="text-center" ItemStyle-Width="120px">
-                                        <ItemTemplate>
-                                            <asp:Label ID="lblEnrolledCount" runat="server" CssClass="badge badge-primary" 
-                                                Text='<%# GetEnrolledStudentsCount(Eval("course_id")) %>' />
-                                        </ItemTemplate>
-                                        <ItemStyle CssClass="text-center" />
-                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Actions" ItemStyle-Width="100px">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="lnkSelect" runat="server" Text="Select" CommandName="Select" 
-                                                CssClass="btn btn-sm btn-outline-primary" />
+                                                CssClass="btn btn-sm btn-outline-primary" CausesValidation="false" />
                                         </ItemTemplate>
                                         <ItemStyle CssClass="text-center" />
                                     </asp:TemplateField>
@@ -222,6 +204,7 @@
         
         .table td {
             font-size: 0.9em;
+            vertical-align: middle;
         }
         
         .fw-bold {
@@ -246,8 +229,76 @@
             color: #dc3545 !important;
         }
         
+        .me-1 {
+            margin-right: 0.25rem !important;
+        }
+        
         .me-2 {
             margin-right: 0.5rem !important;
         }
+        
+        /* Hover effects for better UX */
+        .table-hover tbody tr:hover {
+            background-color: rgba(0,0,0,.05);
+        }
+        
+        /* Better spacing for form elements */
+        .form-control:focus, .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .btn-sm {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+            }
+            
+            .table {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Loading animation for better UX */
+        .card {
+            transition: box-shadow 0.15s ease-in-out;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.075);
+        }
+        
+        /* Better button styles */
+        .btn {
+            transition: all 0.15s ease-in-out;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Selected row highlighting */
+        .table-warning {
+            background-color: rgba(255, 193, 7, 0.1) !important;
+            border-left: 4px solid #ffc107;
+        }
+        
+        /* Disabled button style */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
+
+    <script>
+        // Re-enable buttons on page load (in case of page refresh)
+        window.addEventListener('load', function () {
+            var buttons = document.querySelectorAll('input[type="submit"], input[type="button"]');
+            buttons.forEach(function (button) {
+                button.disabled = false;
+            });
+        });
+    </script>
 </asp:Content>

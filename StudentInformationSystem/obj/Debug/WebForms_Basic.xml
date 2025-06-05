@@ -1045,33 +1045,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:StudentInformationSystem.ManageCourses._btnTestConnection">
-<summary>
-btnTestConnection control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.ManageCourses._btnClearPools">
-<summary>
-btnClearPools control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:StudentInformationSystem.ManageCourses._btnForceReload">
-<summary>
-btnForceReload control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:StudentInformationSystem.ManageCourses._lblTotalCourses">
 <summary>
 lblTotalCourses control.
