@@ -120,7 +120,7 @@
                             <small class="text-muted">
                                 <i class="fas fa-info-circle"></i> 
                                 Welcome back, <strong><%: UserFullName %></strong>! 
-                                You are logged in as <span class="badge badge-secondary"><%: UserRole.ToUpper() %></span>
+                                You are logged in as <span class="badge badge-secondary text-dark"><%: UserRole.ToUpper() %></span>
                             </small>
                         </div>
                     </div>

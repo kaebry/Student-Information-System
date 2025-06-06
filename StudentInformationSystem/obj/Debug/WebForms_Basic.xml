@@ -1522,6 +1522,109 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="M:StudentInformationSystem.ManageStudents.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event - Initializes the page and loads student data
+ </summary>
+ <param name="sender">Event sender</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.btnCreate_Click(System.Object,System.EventArgs)">
+ <summary>
+ ADD STUDENT OPERATION
+ Handles creating new students with full validation and error recovery
+ </summary>
+ <param name="sender">Button that triggered the event</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.btnUpdate_Click(System.Object,System.EventArgs)">
+ <summary>
+ UPDATE STUDENT OPERATION
+ Updates existing student with verification for connection issues
+ </summary>
+ <param name="sender">Button that triggered the event</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.btnDelete_Click(System.Object,System.EventArgs)">
+ <summary>
+ DELETE STUDENT OPERATION
+ Removes student with enrollment checks and no form validation
+ </summary>
+ <param name="sender">Button that triggered the event</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.btnClear_Click(System.Object,System.EventArgs)">
+ <summary>
+ CLEAR FORM OPERATION
+ Resets all form fields and states
+ </summary>
+ <param name="sender">Button that triggered the event</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.gvStudents_SelectedIndexChanged(System.Object,System.EventArgs)">
+ <summary>
+ GRIDVIEW ROW SELECTION EVENT
+ Populates form fields when a student is selected from the grid
+ </summary>
+ <param name="sender">GridView that triggered the event</param>
+ <param name="e">Event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.LoadStudents">
+ <summary>
+ LOAD STUDENTS DATA
+ Retrieves all students from database with retry logic for connection issues
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.GetConnection">
+ <summary>
+ GET DATABASE CONNECTION
+ Returns a tested, working connection with pool management
+ </summary>
+ <returns>Open NpgsqlConnection object</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.VerifyStudentUpdate(System.Int64,System.String,System.String,System.String,System.DateTime)">
+ <summary>
+ VERIFY STUDENT UPDATE
+ Checks if an update operation actually succeeded by comparing database values
+ Used when connection drops during update operations
+ </summary>
+ <param name="studentId">ID of student to verify</param>
+ <param name="firstName">Expected first name</param>
+ <param name="lastName">Expected last name</param>
+ <param name="email">Expected email</param>
+ <param name="enrollmentDate">Expected enrollment date</param>
+ <returns>True if database matches expected values</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.EmailExists(System.String)">
+ <summary>
+ CHECK EMAIL EXISTS
+ Verifies if an email address is already in use
+ </summary>
+ <param name="email">Email address to check</param>
+ <returns>True if email exists in database</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.StudentExists(System.Int64)">
+ <summary>
+ CHECK STUDENT EXISTS
+ Verifies if a student ID exists in the database
+ </summary>
+ <param name="studentId">Student ID to check</param>
+ <returns>True if student exists</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.ClearForm">
+ <summary>
+ CLEAR FORM FIELDS
+ Resets all form controls to their default state
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageStudents.ShowMessage(System.String,System.String)">
+ <summary>
+ SHOW MESSAGE TO USER
+ Displays success, error, or informational messages with appropriate styling
+ </summary>
+ <param name="message">Message text (supports HTML and emojis)</param>
+ <param name="cssClass">Bootstrap CSS class for styling</param>
+</member>
 <member name="F:StudentInformationSystem.SiteMaster._lnkLogout">
 <summary>
 lnkLogout control.

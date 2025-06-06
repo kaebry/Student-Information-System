@@ -92,7 +92,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="fas fa-book-open"></i> Available Courses</h5>
                         <div>
-                            <asp:Label ID="lblTotalCourses" runat="server" CssClass="badge badge-info me-2" Text="Total: 0" />
+                            <asp:Label ID="lblTotalCourses" runat="server" CssClass="badge badge-info me-2 text-dark" Text="Total: 0" />
                             <asp:Button ID="btnRefresh" runat="server" Text="Refresh" CssClass="btn btn-sm btn-outline-primary" OnClick="btnRefresh_Click" />
                         </div>
                     </div>
