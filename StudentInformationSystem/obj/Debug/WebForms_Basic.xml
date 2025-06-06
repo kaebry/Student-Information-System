@@ -190,6 +190,19 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="T:StudentInformationSystem.Login">
+ <summary>
+ Login Page Class - Secure Authentication and Session Management
+ Handles user authentication for multiple roles with enhanced security features
+ Implements cloud database resilience and comprehensive error handling
+ </summary>
+ <remarks>
+ This class provides secure authentication services for the Student Information System
+ with support for multiple user roles (Admin, Student, Teacher), persistent sessions,
+ and robust cloud database connectivity. Security features include BCrypt password
+ hashing, SQL injection prevention, and session hijacking protection.
+ </remarks>
+</member>
 <member name="F:StudentInformationSystem.Login._MessagePanel">
 <summary>
 MessagePanel control.
@@ -288,6 +301,189 @@ pnlRegistrationSuccess control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event Handler - Authentication State and UI Initialization
+ Manages login page display, redirect logic, and user feedback messages
+ Implements security checks to prevent unauthorized access loops
+ </summary>
+ <param name="sender">Page object that raised the load event</param>
+ <param name="e">Event arguments containing page load context</param>
+ <remarks>
+ Handles multiple scenarios:
+ - Redirect already authenticated users to prevent duplicate sessions
+ - Display registration success messages for new users
+ - Show logout confirmation messages for security feedback
+ - Set initial focus for accessibility and user experience
+ Only processes these actions on initial page load (not postbacks)
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.btnLogin_Click(System.Object,System.EventArgs)">
+ <summary>
+ Login Button Click Handler - Primary Authentication Entry Point
+ Orchestrates the complete user authentication workflow
+ Implements comprehensive validation, authentication, and session management
+ </summary>
+ <param name="sender">Login button that triggered the authentication attempt</param>
+ <param name="e">Event arguments from button click</param>
+ <remarks>
+ Authentication Workflow:
+ 1. Input Validation: Server-side validation of form data
+ 2. Credential Processing: Extract and sanitize user credentials
+ 3. Database Authentication: Verify credentials against database
+ 4. Session Creation: Establish secure user session with role data
+ 5. Redirect Management: Route user to appropriate dashboard
+ 6. Error Handling: Provide security-conscious error feedback
+ 
+ Security Considerations:
+ - Input sanitization to prevent injection attacks
+ - Generic error messages to prevent username enumeration
+ - Password field clearing on failed attempts for security
+ - Connection resilience for cloud database reliability
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.AuthenticateUser(System.String,System.String)">
+ <summary>
+ Primary User Authentication Method with Connection Resilience
+ Implements robust authentication with cloud database optimization
+ Provides connection pool management and retry logic for reliability
+ </summary>
+ <param name="email">User's email address (normalized to lowercase)</param>
+ <param name="password">User's plain text password for BCrypt verification</param>
+ <returns>UserInfo object on successful authentication, Nothing on failure</returns>
+ <remarks>
+ Two-phase authentication approach:
+ 1. Connection Preparation: Clear stale connections and prepare fresh connection
+ 2. Direct Authentication: Perform actual credential verification
+ 
+ Error Handling Strategy:
+ - Connection errors: Throw specific exceptions for user feedback
+ - Authentication errors: Return Nothing to prevent information disclosure
+ - Retry logic: Connection pool clearing improves cloud database reliability
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.AuthenticateUserDirect(System.String,System.String)">
+ <summary>
+ Direct Database Authentication with Comprehensive User Data Retrieval
+ Performs actual credential verification and complete user profile loading
+ Implements secure BCrypt password verification and role-based data retrieval
+ </summary>
+ <param name="email">User's email address for database lookup</param>
+ <param name="password">Plain text password for BCrypt hash verification</param>
+ <returns>Complete UserInfo object with profile data, or Nothing on failure</returns>
+ <remarks>
+ Authentication Process:
+ 1. User Existence Check: Verify user exists before password verification
+ 2. Credential Retrieval: Get stored password hash and basic user data
+ 3. Password Verification: BCrypt hash comparison for security
+ 4. Profile Data Loading: Retrieve role-specific profile information
+ 5. UserInfo Assembly: Create complete user object for session management
+ 
+ Security Features:
+ - Separate user existence check prevents timing attacks
+ - BCrypt verification for secure password comparison
+ - Role-based profile data loading for proper authorization
+ - Parameterized queries prevent SQL injection attacks
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.SetUserSession(StudentInformationSystem.Login.UserInfo,System.Boolean)">
+ <summary>
+ Secure Session Establishment and Cookie Management
+ Creates user session with role-based data and optional persistent authentication
+ Implements secure cookie handling with appropriate security flags
+ </summary>
+ <param name="user">Complete user information object from successful authentication</param>
+ <param name="rememberMe">Boolean flag for persistent authentication cookie creation</param>
+ <remarks>
+ Session Management Features:
+ - Role-based session data for authorization and personalization
+ - Full name construction for user interface display
+ - Profile ID mapping for role-specific data access
+ - Optional persistent authentication cookies with security flags
+ - Graceful degradation if cookie creation fails
+ 
+ Security Considerations:
+ - HttpOnly cookies prevent XSS access to authentication data
+ - Secure flag ensures HTTPS-only transmission when available
+ - 30-day expiration balances security with user convenience
+ - FormsAuthentication ticket encryption provides additional security
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.ShowMessage(System.String,System.String)">
+ <summary>
+ Centralized Message Display System for User Feedback
+ Provides consistent, styled feedback messages with appropriate visual styling
+ Supports multiple message types with corresponding Bootstrap styling
+ </summary>
+ <param name="message">Message content to display to user</param>
+ <param name="type">Message type for styling (success, danger, warning, info)</param>
+ <remarks>
+ Message Type Styling:
+ - success: Green styling for positive actions (login success, registration complete)
+ - danger/error: Red styling for errors (authentication failure, system errors)
+ - warning: Yellow styling for warnings (validation issues, cautions)
+ - info: Blue styling for informational messages (logout confirmation, help)
+ 
+ Design Features:
+ - FontAwesome icons provide visual context for message types
+ - Bootstrap alert classes ensure consistent styling
+ - Responsive design works across all device sizes
+ - Accessible markup supports screen readers
+ </remarks>
+</member>
+<member name="M:StudentInformationSystem.Login.HideMessage">
+ <summary>
+ Hide Message Display Panel
+ Clears message content and hides message display area
+ Provides clean state for new user interactions
+ </summary>
+ <remarks>
+ Used to:
+ - Clear previous messages before new operations
+ - Reset UI state for fresh user interactions
+ - Prevent message confusion from previous actions
+ - Maintain clean interface appearance
+ </remarks>
+</member>
+<member name="T:StudentInformationSystem.Login.UserInfo">
+ <summary>
+ User Information Data Transfer Object
+ Contains complete user profile data for session management and authorization
+ Provides structured data container for authenticated user information
+ </summary>
+ <remarks>
+ Data Structure:
+ - UserId: Primary key from users table for database operations
+ - Email: Unique user identifier and primary login credential
+ - Role: User role for access control (admin, student, teacher)
+ - FirstName/LastName: Personal information for UI personalization
+ - ProfileId: Role-specific profile ID for detailed data access
+ 
+ Usage Context:
+ - Authentication result container for successful logins
+ - Session data structure for user context throughout application
+ - Authorization data source for role-based access control
+ - Personalization data for user interface customization
+ </remarks>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.UserId">
+ <summary>Primary database user ID from users table</summary>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.Email">
+ <summary>User's email address - primary identifier and login credential</summary>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.Role">
+ <summary>User role for access control (admin, student, teacher)</summary>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.FirstName">
+ <summary>User's first name for personalization and display</summary>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.LastName">
+ <summary>User's last name for personalization and display</summary>
+</member>
+<member name="P:StudentInformationSystem.Login.UserInfo.ProfileId">
+ <summary>Role-specific profile ID for detailed data access (student_id, teacher_id, etc.)</summary>
 </member>
 <member name="F:StudentInformationSystem.Manage._SuccessMessagePlaceHolder">
  <summary>
