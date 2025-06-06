@@ -937,6 +937,133 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.ManageEnrollments.connStr">
+ <summary>
+ Database connection string from Web.config
+ Optimized for cloud database connectivity with appropriate timeouts
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event Handler
+ Initializes the enrollment management interface with security validation
+ Sets up default date ranges and loads initial data
+ </summary>
+ <param name="sender">The page object that raised the event</param>
+ <param name="e">Event arguments containing request details</param>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.LoadStatistics">
+ <summary>
+ Load Statistical Dashboard Metrics
+ Calculates and displays key performance indicators for enrollment management
+ Provides administrators with at-a-glance system overview
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.LoadEnrollments(System.String,System.String,System.String,System.String)">
+ <summary>
+ Load Enrollments with Advanced Filtering
+ Supports multi-criteria search with date ranges and text matching
+ Implements safe parameter binding to prevent SQL injection
+ </summary>
+ <param name="searchStudent">Student name search filter (partial matching)</param>
+ <param name="searchCourse">Course name search filter (partial matching)</param>
+ <param name="dateFrom">Start date for enrollment date range</param>
+ <param name="dateTo">End date for enrollment date range</param>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.LoadRecentEnrollments">
+ <summary>
+ Load Recent Enrollment Activity
+ Displays latest enrollments for administrative monitoring
+ Limited to 10 most recent entries for performance
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.LoadPopularCourses">
+ <summary>
+ Load Popular Courses Analysis
+ Identifies courses with highest enrollment counts
+ Provides insights for curriculum planning and resource allocation
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.gvEnrollments_RowDataBound(System.Object,System.Web.UI.WebControls.GridViewRowEventArgs)">
+ <summary>
+ GridView Row Data Bound Event Handler
+ Customizes the visual presentation of enrollment data
+ Applies formatting and highlighting based on data values
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.btnDelete_Command(System.Object,System.Web.UI.WebControls.CommandEventArgs)">
+ <summary>
+ Delete Enrollment Command Handler
+ Processes enrollment deletion requests with comprehensive logging
+ Maintains audit trail for administrative oversight
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.DeleteEnrollment(System.Int32)">
+ <summary>
+ Delete Individual Enrollment
+ Removes enrollment record with comprehensive audit trail
+ Provides detailed feedback and refreshes related data
+ </summary>
+ <param name="enrollmentId">Unique identifier of enrollment to delete</param>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.btnSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Search Button Click Handler
+ Applies user-specified search criteria to enrollment list
+ Supports multi-criteria filtering with date ranges
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.btnClearSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Clear Search Button Click Handler
+ Resets all search criteria and displays complete enrollment list
+ Restores default date range for user guidance
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.btnRefresh_Click(System.Object,System.EventArgs)">
+ <summary>
+ Refresh Button Click Handler
+ Reloads all dashboard data while preserving current search context
+ Provides manual refresh capability for real-time data updates
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.RefreshEnrollmentsWithoutFilters">
+ <summary>
+ Simple Enrollment Refresh without Filters
+ Fallback method for error recovery scenarios
+ Used when complex filtering operations fail
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.CheckTotalEnrollments">
+ <summary>
+ Debug Method: Check Total Enrollments
+ Diagnostic utility for troubleshooting data display issues
+ Provides visibility into actual database contents
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.GetWorkingConnection">
+ <summary>
+ Get Working Database Connection
+ Reliable connection factory with automatic pool management
+ Implements cloud database best practices for connection stability
+ </summary>
+ <returns>Tested, working NpgsqlConnection object</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.ShowMessage(System.String,System.String)">
+ <summary>
+ Display User Message
+ Centralized message display system with consistent formatting
+ Supports HTML content and emoji for enhanced user feedback
+ </summary>
+ <param name="message">Message content (HTML and emoji supported)</param>
+ <param name="cssClass">Bootstrap CSS class for styling</param>
+</member>
+<member name="M:StudentInformationSystem.ManageEnrollments.HideMessage">
+ <summary>
+ Hide User Messages
+ Clears message display area for clean UI state
+ </summary>
+</member>
 <member name="F:StudentInformationSystem.Reports._MessagePanel">
 <summary>
 MessagePanel control.
@@ -1386,6 +1513,172 @@ gvCourses control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member>
+<member name="F:StudentInformationSystem.ManageCourses.connStr">
+ <summary>
+ Database connection string retrieved from Web.config
+ Contains optimized parameters for cloud database connectivity
+ </summary>
+</member>
+<member name="F:StudentInformationSystem.ManageCourses.lastPoolClear">
+ <summary>
+ Static tracking of last connection pool clear operation
+ Prevents excessive pool clearing which can impact performance
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event Handler
+ Initializes the page with security checks and data loading
+ Implements smart connection pool management for better reliability
+ </summary>
+ <param name="sender">The page object that triggered the event</param>
+ <param name="e">Event arguments containing request information</param>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.LoadCourses(System.String,System.String,System.String)">
+ <summary>
+ Advanced Course Loading with Retry Logic and Filtering
+ Implements sophisticated error handling for cloud database connectivity issues
+ Supports search and filter parameters for dynamic data retrieval
+ </summary>
+ <param name="searchName">Optional course name search filter</param>
+ <param name="filterFormat">Optional course format filter</param>
+ <param name="searchInstructor">Optional instructor name search filter</param>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.LoadCoursesSimple(System.String,System.String,System.String)">
+ <summary>
+ Simple Course Loading Method
+ Lightweight alternative for basic course loading without complex error handling
+ Used for quick page loads and when advanced features aren't needed
+ </summary>
+ <param name="searchName">Optional course name filter</param>
+ <param name="filterFormat">Optional format filter</param>
+ <param name="searchInstructor">Optional instructor filter</param>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.GetWorkingConnection">
+ <summary>
+ Robust Database Connection Factory
+ Creates and tests database connections with automatic cleanup
+ Implements connection pool management for cloud database reliability
+ </summary>
+ <returns>A tested, working NpgsqlConnection object</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.ExecuteWithRetry(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+ <summary>
+ Execute Database Command with Retry Logic
+ Provides a unified interface for database operations with automatic retry
+ Handles transient failures common in cloud database environments
+ </summary>
+ <param name="query">SQL query to execute</param>
+ <param name="parameters">Dictionary of parameters for the query</param>
+ <returns>True if operation succeeded, False otherwise</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnAdd_Click(System.Object,System.EventArgs)">
+ <summary>
+ Add Course Button Click Handler
+ Creates new course records with comprehensive validation and error handling
+ Implements duplicate checking and transaction safety
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnUpdate_Click(System.Object,System.EventArgs)">
+ <summary>
+ Update Course Button Click Handler
+ Modifies existing course records with validation and error recovery
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnDelete_Click(System.Object,System.EventArgs)">
+ <summary>
+ Delete Course Button Click Handler
+ Removes courses with enrollment validation and safety checks
+ Implements referential integrity checking before deletion
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnClear_Click(System.Object,System.EventArgs)">
+ <summary>
+ Clear Form Button Click Handler
+ Resets all form fields and UI state to default values
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Search Button Click Handler
+ Applies user-specified filters to the course list
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnClearSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Clear Search Button Click Handler
+ Resets all search filters and reloads complete course list
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnTestConnection_Click(System.Object,System.EventArgs)">
+ <summary>
+ Database Connection Test Handler
+ Provides diagnostic functionality for connection troubleshooting
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnClearPools_Click(System.Object,System.EventArgs)">
+ <summary>
+ Connection Pool Clear Handler
+ Manual connection pool management for troubleshooting
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnForceReload_Click(System.Object,System.EventArgs)">
+ <summary>
+ Force Reload Handler
+ Manually triggers course list refresh with full error handling
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.btnLoadWithHelper_Click(System.Object,System.EventArgs)">
+ <summary>
+ Load with Helper Handler
+ Uses the simplified loading method for troubleshooting
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.gvCourses_SelectedIndexChanged(System.Object,System.EventArgs)">
+ <summary>
+ GridView Row Selection Event Handler
+ Populates form fields when a course is selected from the grid
+ Implements safe data extraction and form state management
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.ExtractFormatFromBadge(System.String)">
+ <summary>
+ Format Badge Text Extraction Helper
+ Extracts clean text from HTML-formatted badge elements
+ Handles cases where format display includes styling markup
+ </summary>
+ <param name="badgeHtml">HTML content from grid cell</param>
+ <returns>Clean format text value</returns>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.gvCourses_RowDataBound(System.Object,System.Web.UI.WebControls.GridViewRowEventArgs)">
+ <summary>
+ GridView Row Data Bound Event Handler
+ Customizes the display of course format information with colored badges
+ Executes for each row during data binding to enhance visual presentation
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.ClearForm">
+ <summary>
+ Clear Form Fields and Reset UI State
+ Resets all form controls to their default values and disables action buttons
+ Provides clean slate for new course entry
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.ShowMessage(System.String,System.String)">
+ <summary>
+ Display User Message
+ Shows formatted success, error, or informational messages to the user
+ Supports emoji and HTML content for rich user feedback
+ </summary>
+ <param name="message">Message text (supports HTML and emojis)</param>
+ <param name="cssClass">Bootstrap CSS class for message styling</param>
+</member>
+<member name="M:StudentInformationSystem.ManageCourses.HideMessage">
+ <summary>
+ Hide User Messages
+ Clears and hides the message display area
+ </summary>
 </member>
 <member name="F:StudentInformationSystem.ManageStudents._lblMessage">
 <summary>
