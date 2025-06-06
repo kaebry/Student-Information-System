@@ -1280,6 +1280,102 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:StudentInformationSystem.Reports.connStr">
+ <summary>
+ Database connection string retrieved from Web.config
+ Optimized for cloud database connectivity with appropriate timeout settings
+ Used across all database operations for consistency and security
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event Handler
+ Initializes the reports dashboard with security validation and data loading
+ Implements role-based access control for administrative functions
+ </summary>
+ <param name="sender">The page object that raised the event</param>
+ <param name="e">Event arguments containing page load context</param>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadReportsData">
+ <summary>
+ Master Data Loading Orchestrator
+ Coordinates loading of all dashboard components in optimal sequence
+ Implements comprehensive error handling to ensure partial functionality
+ even if individual components fail
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadStatistics">
+ <summary>
+ Load Dashboard Statistics and KPI Metrics
+ Calculates and displays key performance indicators for system overview
+ Provides administrators with critical system health and usage metrics
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadStudentsPerCourseChart">
+ <summary>
+ Prepare Students per Course Bar Chart Data
+ Aggregates enrollment data for visual representation in Chart.js
+ Creates dynamic bar chart showing course popularity distribution
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadEnrollmentTrendsChart">
+ <summary>
+ Prepare Enrollment Trends Line Chart Data
+ Analyzes enrollment patterns over the last 6 months
+ Provides temporal insights for administrative planning
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadCourseFormatDistribution">
+ <summary>
+ Prepare Course Format Distribution Pie Chart Data
+ Analyzes distribution of different course delivery formats
+ Provides insights into curriculum delivery method preferences
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.LoadRecentActivity">
+ <summary>
+ Load Recent Enrollment Activity Feed
+ Displays latest enrollment operations for administrative monitoring
+ Provides real-time visibility into system usage patterns
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.btnRefresh_Click(System.Object,System.EventArgs)">
+ <summary>
+ Refresh Button Click Handler
+ Manually reloads all dashboard data and provides user feedback
+ Useful for real-time monitoring and data verification
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.btnExportData_Click(System.Object,System.EventArgs)">
+ <summary>
+ Export Data Button Click Handler
+ Generates and downloads CSV report of enrollment data
+ Provides administrators with data for external analysis
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.Reports.GetWorkingConnection">
+ <summary>
+ Reliable Database Connection Factory
+ Creates tested database connections with automatic cleanup
+ Implements cloud database best practices for connection stability
+ </summary>
+ <returns>Open, tested NpgsqlConnection object</returns>
+</member>
+<member name="M:StudentInformationSystem.Reports.ShowMessage(System.String,System.String)">
+ <summary>
+ Centralized User Message Display System
+ Provides consistent, styled feedback to administrators
+ Supports HTML content and emoji for enhanced communication
+ </summary>
+ <param name="message">Message content (HTML and emoji supported)</param>
+ <param name="cssClass">Bootstrap CSS class for styling (alert types)</param>
+</member>
+<member name="M:StudentInformationSystem.Reports.HideMessage">
+ <summary>
+ Hide User Messages
+ Clears message display area for clean dashboard state
+ </summary>
+</member>
 <member name="F:StudentInformationSystem.ManageCourses._MessagePanel">
 <summary>
 MessagePanel control.
@@ -2079,6 +2175,149 @@ pnlNoEnrollments control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses.connStr">
+ <summary>
+ Database connection string from Web.config
+ Optimized for cloud database connectivity with appropriate timeouts
+ Shared across all database operations for consistency
+ </summary>
+</member>
+<member name="F:StudentInformationSystem.AvailableCourses.currentStudentId">
+ <summary>
+ Current student's unique identifier
+ Retrieved from session and used for all enrollment operations
+ Critical for maintaining student-specific data isolation
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.Page_Load(System.Object,System.EventArgs)">
+ <summary>
+ Page Load Event Handler
+ Initializes the student course portal with security validation and data loading
+ Implements comprehensive student authentication and profile retrieval
+ </summary>
+ <param name="sender">The page object that raised the event</param>
+ <param name="e">Event arguments containing page load context</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.LoadStudentInfo">
+ <summary>
+ Load Student Information Dashboard
+ Displays personal academic information and enrollment statistics
+ Provides student with overview of their academic progress
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.LoadAvailableCourses(System.String,System.String,System.String)">
+ <summary>
+ Load Available Courses with Advanced Filtering
+ Displays course catalog with search and filter capabilities
+ Implements comprehensive course discovery functionality
+ </summary>
+ <param name="searchName">Optional course name search filter</param>
+ <param name="filterFormat">Optional course format filter (lecture, seminar, etc.)</param>
+ <param name="filterECTS">Optional ECTS credit range filter</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.LoadMyEnrollments">
+ <summary>
+ Load Student's Current Enrollments
+ Displays personal enrollment dashboard with course details
+ Provides overview of student's current academic commitments
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.IsStudentEnrolledInCourse(System.Int32)">
+ <summary>
+ Check Student Enrollment Status for Specific Course
+ Determines if student is already enrolled in a given course
+ Critical for preventing duplicate enrollments and UI state management
+ </summary>
+ <param name="courseId">Unique course identifier to check</param>
+ <returns>True if student is enrolled, False otherwise</returns>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.gvCourses_RowDataBound(System.Object,System.Web.UI.WebControls.GridViewRowEventArgs)">
+ <summary>
+ GridView Row Data Bound Event Handler
+ Customizes course display with enrollment status and action buttons
+ Implements dynamic UI based on student's enrollment state
+ </summary>
+ <param name="sender">GridView that triggered the event</param>
+ <param name="e">Row data binding event arguments</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.btnEnroll_Command(System.Object,System.Web.UI.WebControls.CommandEventArgs)">
+ <summary>
+ Enrollment Button Command Handler
+ Processes student enrollment requests with validation
+ Implements secure enrollment operations with confirmation
+ </summary>
+ <param name="sender">Button that triggered the enrollment</param>
+ <param name="e">Command event arguments containing course ID</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.btnUnenroll_Command(System.Object,System.Web.UI.WebControls.CommandEventArgs)">
+ <summary>
+ Unenrollment Button Command Handler
+ Processes student unenrollment requests with validation
+ Allows students to drop courses with confirmation
+ </summary>
+ <param name="sender">Button that triggered the unenrollment</param>
+ <param name="e">Command event arguments containing course ID</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.EnrollInCourse(System.Int32)">
+ <summary>
+ Enroll Student in Course
+ Implements comprehensive enrollment process with validation
+ Prevents duplicate enrollments and maintains data integrity
+ </summary>
+ <param name="courseId">Unique identifier of course to enroll in</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.UnenrollFromCourse(System.Int32)">
+ <summary>
+ Unenroll Student from Course
+ Implements secure course withdrawal process
+ Allows students to drop courses with immediate effect
+ </summary>
+ <param name="courseId">Unique identifier of course to withdraw from</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.btnSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Search Button Click Handler
+ Applies user-specified search and filter criteria to course catalog
+ Implements multi-criteria course discovery functionality
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.btnClearSearch_Click(System.Object,System.EventArgs)">
+ <summary>
+ Clear Search Button Click Handler
+ Resets all search filters and displays complete course catalog
+ Returns to default course discovery view
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.btnRefresh_Click(System.Object,System.EventArgs)">
+ <summary>
+ Manual Refresh Button Click Handler
+ Reloads all portal data while preserving current search context
+ Useful for real-time data verification and troubleshooting
+ </summary>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.GetWorkingConnection">
+ <summary>
+ Reliable Database Connection Factory
+ Creates tested database connections with cloud database optimization
+ Implements connection pool management for better reliability
+ </summary>
+ <returns>Open, tested NpgsqlConnection object</returns>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.ShowMessage(System.String,System.String)">
+ <summary>
+ Centralized User Message Display System
+ Provides consistent, styled feedback to students
+ Supports HTML content and emoji for enhanced communication
+ </summary>
+ <param name="message">Message content (HTML and emoji supported)</param>
+ <param name="cssClass">Bootstrap CSS class for styling</param>
+</member>
+<member name="M:StudentInformationSystem.AvailableCourses.HideMessage">
+ <summary>
+ Hide User Messages
+ Clears message display area for clean portal state
+ </summary>
 </member>
 <member name="F:StudentInformationSystem.Site_Mobile._Head1">
 <summary>
