@@ -28,21 +28,10 @@ This project was created for the course "Skills: Programming with Generative AI"
 * **BCrypt.Net** for password hashing
 * **Chart.js** for charts 
 
----
 
-## Quick Start (Dev)
 
-```bash
-# 1. Clone
-$ git clone https://github.com/kaebry/Student-Information-System.git
-$ cd Student-Information-System
 
-# 2. Restore packages & run
-# Visual Studio: F5
-# CLI:
-$ dotnet restore
-$ dotnet run --project StudentInformationSystem
-```
+
 
 ---
 
